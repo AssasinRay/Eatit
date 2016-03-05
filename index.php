@@ -146,8 +146,6 @@
 										<li><a href="#">CONTACT</a></li>
 										<div class="clearfix"></div>
 									</ul>
-								
-
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
@@ -158,7 +156,7 @@
 									   </div>
 									</div>
 										<div align="center">
-									<h1>EATIT</h1>
+									<h1 class="eatit-title">EATIT</h1>
 								</div>
 								</a>
 							</div>
@@ -204,7 +202,7 @@
 									   </div>
 									</div>
 										<div align="center">
-									<h1>EATIT</h1>
+									<h1 class="eatit-title">EATIT</h1>
 								</div>
 								</a>
 							</div>

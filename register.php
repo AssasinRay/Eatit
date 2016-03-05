@@ -1,3 +1,32 @@
+<?php
+session_start();
+if(isset($_SESSION['user'])!="")
+{
+ header("Location: home.php");
+}
+include_once 'dbconnect.php';
+
+if(isset($_POST['btn-signup']))
+{
+ $uname = mysql_real_escape_string($_POST['uname']);
+ $email = mysql_real_escape_string($_POST['email']);
+ $upass = md5(mysql_real_escape_string($_POST['pass']));
+ 
+ if(mysql_query("INSERT INTO users(username,email,password) VALUES('$uname','$email','$upass')"))
+ {
+  ?>
+        <script>alert('successfully registered ');</script>
+        <?php
+ }
+ else
+ {
+  ?>
+        <script>alert('error while registering you...');</script>
+        <?php
+ }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -143,15 +172,11 @@
 				<div class="reg">
 					 <p>Welcome, please enter the following details to continue.</p>
 					 <p>If you have previously registered with us, <a href="login.html">click here</a></p>
-					 <form>
+					 <form action="register.php" method="post">
 						 <ul>
-							 <li class="text-info">First Name: </li>
+							 <li class="text-info">Username: </li>
 							 <li><input type="text" value=""></li>
 						 </ul>
-						 <ul>
-							 <li class="text-info">Last Name: </li>
-							 <li><input type="text" value=""></li>
-						 </ul>				 
 						<ul>
 							 <li class="text-info">Email: </li>
 							 <li><input type="text" value=""></li>
@@ -165,9 +190,13 @@
 							 <li><input type="password" value=""></li>
 						 </ul>
 						 <ul>
-							 <li class="text-info">Mobile Number:</li>
+							 <li class="text-info">Phone Number:</li>
 							 <li><input type="text" value=""></li>
-						 </ul>						
+						 </ul>	
+						  <ul>
+							 <li class="text-info">Address:</li>
+							 <li><input type="text" value=""></li>
+						 </ul>								
 						 <input type="submit" value="REGISTER NOW">
 						 <!--
 						 <p class="click">By clicking this button, you are agree to my  <a href="#">Policy Terms and Conditions.</a></p> 

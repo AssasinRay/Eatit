@@ -158,7 +158,7 @@ background-size:cover;
 min-height: 800px;
 }
 .banner.one{
-background:url(../images/888.jpg) no-repeat 0px 0px;
+background:url(../images/555.jpg) no-repeat 0px 0px;
 background-size:cover;
 -webkit-background-size: cover;
 -o-background-size: cover;
@@ -166,7 +166,7 @@ background-size:cover;
 -moz-background-size: cover;
 }
 .banner.two{
-background:url(../images/777.jpg) no-repeat 0px 0px;
+background:url(../images/6666.jpg) no-repeat 0px 0px;
 background-size:cover;
 -webkit-background-size: cover;
 -o-background-size: cover;
@@ -193,7 +193,7 @@ margin: 0px 0 0px 0;
 }
 .logo  a h1{
 font-family: 'Slabo 27px', serif;
-color:#f65a5b;
+color:yellow;
 font-size: 66px;
 text-decoration:none;
   margin-top: 42px;

@@ -2,33 +2,32 @@
 	// require('dbconnect.php');
     // If the values are posted, insert them into the database.
 
-	$server_name='engr-cpanel-mysql.engr.illinois.edu'
-	$user_name='localhost'
-	$password=''
-	$database_name="eatiteat_User"
-	$connection = mysql_connect(server_name,user_name, password);
+	$server_name="engr-cpanel-mysql.engr.illinois.edu";
+	$user_name="eatiteat_Ray";
+	$password="l!Jkaqc2)Z%J";
+	$database_name="eatiteat_User";
+	$connection = mysqli_connect($server_name,$user_name, $password);
 
 	if (!$connection){
 
-		<script> alert('connection fail')</script>
+		// <script> alert('connection fail')</script>
 	    die("Database Connection Failed" . mysqli_connect_error());
 
 	}
-	echo "Connected successfully";
-	$select_db = mysql_select_db($database_name);
+	$select_db = mysqli_select_db($connection,$database_name);
 
 	if (!$select_db){
 
-		<script> alert('databaseselection fail')</script>
+		// <script> alert('databaseselection fail')</script>
 	    die("Database Selection Failed" . mysql_error());
 
 	}
-	echo "databaseconnection successfully";
 
 
     if (isset($_POST['username']) && isset($_POST['password'])  && isset($_POST['repassword'])
       			&& isset($_POST['email'])  && isset($_POST['address']) && isset($_POST['phonenumber']))
     {
+    	echo "all fields are set";
         $username = $_POST['username'];
 		$email = $_POST['email'];
         $password = $_POST['password'];
@@ -37,27 +36,33 @@
         $phonenumber = $_POST['phonenumber'];
  		if($password==$repassword)
  		{
- 			$query = "INSERT INTO `User` (Username, password, phone_num,address, email) 
+ 			$query = "INSERT INTO User (Username, PASSWORD, phone_num,address, email) 
  			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
-	        $result = mysql_query($query);
+//  			$query="INSERT INTO User( Username, 
+// PASSWORD , phone_num, address, email ) 
+// VALUES (
+// 'newname',  's1sss23123',  '123123',  'asdfasdf',  'a@a.a'
+// )";
+	        $result = mysqli_query($connection,$query);
 	        if($result){
+	        	echo "user create successfully";
 	            $msg = "User Created Successfully.";
 	        }
 	        else
 	        {
-	        	$msg = "Failed to create user.";
+	        	die("fail database query" . mysqli_error($connection));
 	        }
 
 
  		}
  		else
  		{
- 			<script> alert('Password does not match, please double check')</script>
+ 			echo "password not match";
+ 			// <script> alert('Password does not match, please double check')</script>
  		}
         
     }
-    mysqli_close($connection);
-    <script> alert('script finished')</script>
+    // <script> alert('script finished')</script>
 ?>
 
 <!DOCTYPE html>

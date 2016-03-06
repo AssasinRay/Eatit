@@ -4271,3 +4271,11 @@ li.data.order-special {
 }
 
 /*-- responsive media queries --*/
+#regbutton {
+  margin-top: 5%;
+}
+
+#regerror {
+  color:red;
+  font-size: 1.3em;
+}

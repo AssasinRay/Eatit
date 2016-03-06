@@ -1,68 +1,92 @@
 <?php
 	// require('dbconnect.php');
-    // If the values are posted, insert them into the database.
 
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$password="l!Jkaqc2)Z%J";
 	$database_name="eatiteat_User";
 	$connection = mysqli_connect($server_name,$user_name, $password);
+	$errors = array();
 
 	if (!$connection){
-
 		// <script> alert('connection fail')</script>
 	    die("Database Connection Failed" . mysqli_connect_error());
-
 	}
+
 	$select_db = mysqli_select_db($connection,$database_name);
 
 	if (!$select_db){
-
 		// <script> alert('databaseselection fail')</script>
 	    die("Database Selection Failed" . mysql_error());
-
 	}
-
 
     if (isset($_POST['username']) && isset($_POST['password'])  && isset($_POST['repassword'])
       			&& isset($_POST['email'])  && isset($_POST['address']) && isset($_POST['phonenumber']))
     {
-    	echo "all fields are set";
-        $username = $_POST['username'];
-		$email = $_POST['email'];
-        $password = $_POST['password'];
-        $repassword = $_POST['repassword'];
-		$address = $_POST['address'];
-        $phonenumber = $_POST['phonenumber'];
- 		if($password==$repassword)
- 		{
- 			$query = "INSERT INTO User (Username, PASSWORD, phone_num,address, email) 
- 			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
-//  			$query="INSERT INTO User( Username, 
-// PASSWORD , phone_num, address, email ) 
-// VALUES (
-// 'newname',  's1sss23123',  '123123',  'asdfasdf',  'a@a.a'
-// )";
-	        $result = mysqli_query($connection,$query);
-	        if($result){
-	        	echo "user create successfully";
-	            $msg = "User Created Successfully.";
-	        }
-	        else
-	        {
-	        	die("fail database query" . mysqli_error($connection));
-	        }
+    	//echo "all fields are set";
 
+        $username = mysqli_real_escape_string($connection, $_POST['username']);
+		$email = mysqli_real_escape_string($connection, $_POST['email']);
+        $password = mysqli_real_escape_string($connection, $_POST['password']);
+        $repassword = mysqli_real_escape_string($connection, $_POST['repassword']);
+		$address = mysqli_real_escape_string($connection, $_POST['address']);
+        $phonenumber = mysqli_real_escape_string($connection, $_POST['phonenumber']);
 
- 		}
- 		else
- 		{
- 			echo "password not match";
- 			// <script> alert('Password does not match, please double check')</script>
- 		}
-        
+			$mysql_get_users = mysqli_query($connection, "SELECT * FROM User where Username='$username'");
+			$get_rows = mysqli_affected_rows($connection);
+			if($get_rows >=1){
+				$errors['username'] = "Username already exists. Please try another name";
+			}
+
+            $validate_email = filter_var($email, FILTER_VALIDATE_EMAIL);
+            if (!$validate_email) {
+            	$errors['email'] = "Please enter a valid email";
+            }
+            	
+			$mysql_get_emails = mysqli_query($connection, "SELECT * FROM User where email='$email'");
+			$get_rows2 = mysqli_affected_rows($connection);
+			if($get_rows2 >=1){
+				$errors['email'] = "Email has been taken. Please use another email address";
+			}
+
+            if ($password!=$repassword) 
+            	$errors['password'] = "Passwords do not match";
+
+            if (empty($errors)) {
+	            $query = "INSERT INTO User (Username, PASSWORD, phone_num,address, email) 
+	 			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
+	//  			$query="INSERT INTO User( Username, 
+	// PASSWORD , phone_num, address, email ) 
+	// VALUES (
+	// 'newname',  's1sss23123',  '123123',  'asdfasdf',  'a@a.a'
+	// )";
+		        $result = mysqli_query($connection,$query);
+		        if($result){
+		        //	echo "user create successfully";
+		            $msg = "User Created Successfully.";
+		            // redirect to login page here
+		            header('Location: login.php');
+		        }
+		        else
+		        {
+		        	die("Database error: " . mysqli_error($connection));
+		        }
+            }
+ 			
     }
-    // <script> alert('script finished')</script>
+    else 
+    	$errors['missing'] = "All fields are required";
+
+
+   function display_errors($errors=array()){
+   $output = "";
+   if (!empty($errors)){ 
+     foreach ($errors as $key => $error){
+    	$output .= "{$error}<br />";
+     }
+   }
+   return $output;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -95,10 +119,20 @@
 		<script type="text/javascript" src="js/easing.js"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
+				//$('#regerror').text("");
 				$(".scroll").click(function(event){		
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
+				/*
+				$('#repassword').blur(function(){
+					var pin = $('#password').val();
+					var repin = $('#repassword').val();
+					if (pin !== repin) 
+						$('#regerror').text("*Your password doesn't match");
+					else 
+						$('#regerror').text("");
+				}); */
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -209,7 +243,8 @@
 			<div class="reg-form">
 				<div class="reg">
 					 <p>Welcome, please enter the following details to continue.</p>
-					 <p>If you have previously registered with us, <a href="login.html">click here</a></p>
+					 <p>If you have previously registered with us, <a href="login.php">click here</a>.</p>
+					 <p>Upon successful registration, you will be redirected to the login page.</p>
 					 <form action="register.php" method="post">
 						 <ul>
 							 <li class="text-info">Username: </li>
@@ -235,7 +270,10 @@
 							 <li class="text-info">Address:</li>
 							 <li><input type="text" id="address" name="address" placeholder="address"></li>
 						 </ul>								
-						 <input type="submit" name="submit" value="REGISTER NOW">
+						 <p id="regerror">
+						 	<?php echo display_errors($errors); ?>
+						 </p>
+						 <input id="regbutton"type="submit" name="submit" value="REGISTER NOW">
 						 <!--
 						 <p class="click">By clicking this button, you are agree to my  <a href="#">Policy Terms and Conditions.</a></p> 
 						-->

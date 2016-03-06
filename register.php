@@ -1,30 +1,63 @@
 <?php
-session_start();
-if(isset($_SESSION['user'])!="")
-{
- header("Location: home.php");
-}
-include_once 'dbconnect.php';
+	// require('dbconnect.php');
+    // If the values are posted, insert them into the database.
 
-if(isset($_POST['btn-signup']))
-{
- $uname = mysql_real_escape_string($_POST['uname']);
- $email = mysql_real_escape_string($_POST['email']);
- $upass = md5(mysql_real_escape_string($_POST['pass']));
- 
- if(mysql_query("INSERT INTO users(username,email,password) VALUES('$uname','$email','$upass')"))
- {
-  ?>
-        <script>alert('successfully registered ');</script>
-        <?php
- }
- else
- {
-  ?>
-        <script>alert('error while registering you...');</script>
-        <?php
- }
-}
+	$server_name='engr-cpanel-mysql.engr.illinois.edu'
+	$user_name='localhost'
+	$password=''
+	$database_name="eatiteat_User"
+	$connection = mysql_connect(server_name,user_name, password);
+
+	if (!$connection){
+
+		<script> alert('connection fail')</script>
+	    die("Database Connection Failed" . mysqli_connect_error());
+
+	}
+	echo "Connected successfully";
+	$select_db = mysql_select_db($database_name);
+
+	if (!$select_db){
+
+		<script> alert('databaseselection fail')</script>
+	    die("Database Selection Failed" . mysql_error());
+
+	}
+	echo "databaseconnection successfully";
+
+
+    if (isset($_POST['username']) && isset($_POST['password'])  && isset($_POST['repassword'])
+      			&& isset($_POST['email'])  && isset($_POST['address']) && isset($_POST['phonenumber']))
+    {
+        $username = $_POST['username'];
+		$email = $_POST['email'];
+        $password = $_POST['password'];
+        $repassword = $_POST['repassword'];
+		$address = $_POST['address'];
+        $phonenumber = $_POST['phonenumber'];
+ 		if($password==$repassword)
+ 		{
+ 			$query = "INSERT INTO `User` (Username, password, phone_num,address, email) 
+ 			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
+	        $result = mysql_query($query);
+	        if($result){
+	            $msg = "User Created Successfully.";
+	        }
+	        else
+	        {
+	        	$msg = "Failed to create user.";
+	        }
+
+
+ 		}
+ 		else
+ 		{
+ 			<script> alert('Password does not match, please double check')</script>
+ 		}
+        
+    }
+    mysqli_close($connection);
+    <script> alert('script finished')</script>
 ?>
 
 <!DOCTYPE html>
@@ -175,29 +208,29 @@ if(isset($_POST['btn-signup']))
 					 <form action="register.php" method="post">
 						 <ul>
 							 <li class="text-info">Username: </li>
-							 <li><input type="text" value=""></li>
+							 <li><input type="text" id="username "name="username" placeholder="username"></li>
 						 </ul>
 						<ul>
 							 <li class="text-info">Email: </li>
-							 <li><input type="text" value=""></li>
+							 <li><input type="text" id="email "name="email" placeholder="email"></li>
 						 </ul>
 						 <ul>
 							 <li class="text-info">Password: </li>
-							 <li><input type="password" value=""></li>
+							 <li><input type="password" id="password" name="password" placeholder="password"></li>
 						 </ul>
 						 <ul>
 							 <li class="text-info">Re-enter Password:</li>
-							 <li><input type="password" value=""></li>
+							 <li><input type="password" id="repassword" name="repassword" placeholder="password again"></li>
 						 </ul>
 						 <ul>
 							 <li class="text-info">Phone Number:</li>
-							 <li><input type="text" value=""></li>
+							 <li><input type="text" id="phonenumber" name="phonenumber" placeholder="phonenumber"></li>
 						 </ul>	
 						  <ul>
 							 <li class="text-info">Address:</li>
-							 <li><input type="text" value=""></li>
+							 <li><input type="text" id="address" name="address" placeholder="address"></li>
 						 </ul>								
-						 <input type="submit" value="REGISTER NOW">
+						 <input type="submit" name="submit" value="REGISTER NOW">
 						 <!--
 						 <p class="click">By clicking this button, you are agree to my  <a href="#">Policy Terms and Conditions.</a></p> 
 						-->

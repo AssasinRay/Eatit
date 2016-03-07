@@ -1,0 +1,9 @@
+#1
+Date: March 6, 2016
+Bug: can't store user registration info into the database.
+Solution: in the insert statement, surround PHP variables with single quotes, and use 'PASSWORD' as the column name rather than 'password'. 
+
+#2 
+Date: March 7, 2016
+Bug: Failed to store username into sessionStorage.
+Solution: don't use PHP "header()" function to redirect, use JavaScript "window.location" instead. 

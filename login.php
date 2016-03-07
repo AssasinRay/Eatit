@@ -1,3 +1,71 @@
+<?php 
+  
+    session_start();
+	$server_name="engr-cpanel-mysql.engr.illinois.edu";
+	$user_name="eatiteat_Ray";
+	$password="l!Jkaqc2)Z%J";
+	$database_name="eatiteat_User";
+	$connection = mysqli_connect($server_name,$user_name, $password);
+	$errors = array();
+
+	if (!$connection){
+		// <script> alert('connection fail')</script>
+	    die("Database Connection Failed" . mysqli_connect_error());
+	}
+
+	$select_db = mysqli_select_db($connection,$database_name);
+
+	if (!$select_db){
+		// <script> alert('databaseselection fail')</script>
+	    die("Database Selection Failed" . mysql_error());
+	}
+
+	if (isset($_POST['username']) && isset($_POST['password'])){
+         $username = mysqli_real_escape_string($connection, $_POST['username']);
+		 $inputpin = $_POST['password'];
+         
+         $result = mysqli_query($connection, "SELECT * FROM User where Username='$username'");
+		 $get_rows= mysqli_affected_rows($connection);
+
+		 if($get_rows != 0){
+			while($row = mysqli_fetch_assoc($result)){
+				$dbusername = $row['Username'];
+				$dbpin = $row['password'];
+			}
+			if ($dbpin != $inputpin)
+			   $errors['combination'] = "Please double check your username/password";
+			else {
+				$_SESSION['name'] = $username;
+				?> 
+				<script type="text/javascript"> 
+				var name = "<?php echo $dbusername ?>";
+				sessionStorage.User = name;
+				//alert(sessionStorage.User);
+				window.location = "user.php";
+				</script>
+				<?php
+			//	$_SESSION['name'] = $username;
+			//	header('Location: user.php');
+			}
+		 }
+		 else
+		 	$errors['notfound'] = "User not found";
+
+	}
+    else 
+    	$errors['missing'] = "All fields are required";
+
+     function display_errors($errors=array()){
+   $output = "";
+   if (!empty($errors)){ 
+     foreach ($errors as $key => $error){
+    	$output .= "{$error}<br />";
+     }
+   }
+   return $output;
+  }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +100,11 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
+				/*
+				$("#loginbutton").click(function(){
+					sessionStorage.User = $('#username').val();
+				});
+*/
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -114,7 +187,7 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
@@ -141,13 +214,16 @@
 					 <h3>LOGIN</h3>
 					 <div class="strip"></div>
 					 <p>Welcome, please log in to continue.</p>
-					 <form>
+					 <form action="login.php" method="post">
 						 <h5>User Name:</h5>	
-						 <input type="text" value="">
+						 <input type="text" id="username" name="username" placeholder="username">
 						 <h5>Password:</h5>
-						 <input type="password" value="">					
-						 <input type="submit" value="LOGIN">
-						  
+						 <input type="password" id="password" name="password" placeholder="password">					
+						 <p id="login_error">
+						 	<?php echo display_errors($errors); ?>
+						 </p>
+						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
+
 					 </form>
 					 <!--
 					<a href="#">Forgot Password ?</a>
@@ -157,7 +233,7 @@
 					<h3>NEW REGISTRATION</h3>
 					<div class="strip"></div>
 					<p>By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.</p>
-					<a href="register.html" class="hvr-shutter-in-horizontal button">CREATE AN ACCOUNT</a>
+					<a href="register.php" class="hvr-shutter-in-horizontal button">CREATE AN ACCOUNT</a>
 			</div>
 			<div class="clearfix"></div>
 		</div>
@@ -201,14 +277,6 @@
 		
 		<div class="footer-right">
 			<ul>
-				<!--
-				<li><a href="#" class="twitter"> </a></li>
-				<li><a href="#" class="facebook"> </a></li>
-				<li><a href="#" class="chrome"> </a></li>
-				<li><a href="#" class="pinterest"> </a></li>
-				<li><a href="#" class="linkedin"> </a></li>
-				<li><a href="#" class="dribbble"> </a></li>
-			-->
 			   <li>Yiwei Zhuang<li>
 			   <li>Daocun Yang<li>
 			   	<li>Yang Yao<li>

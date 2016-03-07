@@ -3,9 +3,9 @@
 
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
-	$password="l!Jkaqc2)Z%J";
+	$dbpassword="l!Jkaqc2)Z%J";
 	$database_name="eatiteat_User";
-	$connection = mysqli_connect($server_name,$user_name, $password);
+	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
 	$errors = array();
 
 	if (!$connection){
@@ -215,7 +215,7 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
@@ -270,7 +270,7 @@
 							 <li class="text-info">Address:</li>
 							 <li><input type="text" id="address" name="address" placeholder="address"></li>
 						 </ul>								
-						 <p id="regerror">
+						 <p id="signup_error">
 						 	<?php echo display_errors($errors); ?>
 						 </p>
 						 <input id="regbutton"type="submit" name="submit" value="REGISTER NOW">

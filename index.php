@@ -28,9 +28,28 @@
 		<script type="text/javascript" src="js/easing.js"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function($) {
+			
 				$(".scroll").click(function(event){		
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+				if (!sessionStorage.User){
+					var content1 = "<li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a> </li>";
+
+					$("#basic-actions").html(content1);
+				}
+				else {
+					var content2 = "<li id=\"logout_link\">";
+						content2 += "<form action=\"logout.php\" method=\"post\">";
+						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
+						content2 += "</form></li>";
+					$("#basic-actions").html(content2);
+
+				}
+
+				$("#logout_link").click(function(){
+					sessionStorage.clear();
 				});
 			});
 		</script>
@@ -42,17 +61,15 @@
 <div class="header">
 	<div class="container">
 		<div class="top-header">
-				<!--
+				
 				<div class="header-left">
-					<p>Place your order and get 20% off on each price</p>
+				<!--	<p>Place your order and get 20% off on each price</p> -->
 				</div>
-			-->
 
 				<div class="login-section">
-					<ul style="padding-left:0">
-						<li><a href="login.php">Login</a>  </li> |
-						<li><a href="register.php">Register</a> </li>
-					</ul>
+					<ul id="basic-actions">
+						
+					</ul>	
 				</div>
 				<!-- start search-->
 				<!--
@@ -138,7 +155,7 @@
 							<div class="navigation text-center">
 								<span class="menu"><img src="images/menu.png" alt=""/></span>
 									<ul class="nav1">
-										<li><a class="active" href="index.html">HOME</a></li>
+										<li><a class="active" href="index.php">HOME</a></li>
 										<li><a href="#">ABOUT</a></li>
 										<li><a href="#">MENU</a></li>
 										<li><a href="#">GALLERY</a></li>
@@ -149,7 +166,7 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
@@ -175,7 +192,7 @@
 							<div class="navigation text-center">
 								<span class="menu"><img src="images/menu.png" alt=""/></span>
 									<ul class="nav1">
-										<li><a class="active" href="index.html">HOME</a></li>
+										<li><a class="active" href="index.php">HOME</a></li>
 										<li><a href="">ABOUT</a></li>
 										<li><a href="">MENU</a></li>
 										<li><a href="">GALLERY</a></li>
@@ -195,7 +212,7 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
@@ -261,7 +278,7 @@
 <div class="welcome">
 	<div class="container">
 		<div class="wel-info">
-			<h3>WELCOME!</h3>
+			<h3>WELCOME</h3>
 			<div class="strip-line"></div>
 			<p>Discover and order delicious home-made food. </p>
 		</div>

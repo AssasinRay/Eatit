@@ -193,7 +193,7 @@ margin: 0px 0 0px 0;
 }
 .logo  a h1{
 font-family: 'Slabo 27px', serif;
-color:yellow;
+color:white;
 font-size: 66px;
 text-decoration:none;
   margin-top: 42px;
@@ -4271,11 +4271,16 @@ li.data.order-special {
 }
 
 /*-- responsive media queries --*/
-#regbutton {
+#regbutton, #loginbutton {
   margin-top: 5%;
 }
 
-#regerror {
+#login_error, #signup_error {
   color:red;
   font-size: 1.3em;
+}
+
+#logoutbutton {
+  background: none;
+  border: none;
 }

@@ -1,3 +1,10 @@
+<?php 
+   session_start();
+
+   if (!isset($_SESSION['name']))  
+   	  header('Location: index.php');
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +39,24 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
+
+				//$("#Name").text(sessionStorage.User);
+				if (sessionStorage.User === ""){
+					$('#login_link').show();
+					$('#register_link').show();
+					$('#logout_link').hide();
+				}
+				else {
+					$("#Name").text(sessionStorage.User);
+					$('#login_link').hide();
+					$('#register_link').hide();
+					$('#logout_link').show();
+
+				}
+
+				$("#logout_link").click(function(){
+					sessionStorage.clear();
+				});
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -47,8 +72,13 @@
 				</div>
 				<div class="login-section">
 					<ul>
-						<li><a href="login.php">Login</a>  </li> |
-						<li><a href="register.php">Register</a> </li>
+						<li id="login_link"><a href="login.php">Login</a>  |</li> 
+						<li id="register_link"><a href="register.php">Register</a> </li>
+						<li id="logout_link">
+						<form action="logout.php" method="post">
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
+						</form>
+						</li>
 					</ul>
 				</div>
 				<!-- start search-->
@@ -114,7 +144,7 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
@@ -136,7 +166,7 @@
 <!-- registration-form -->
 <div class="registration-form">
 	<div class="container">
-      <h3>User's personal page</h3>
+      <h3>Welcome, <span id="Name"></span></h3>
 	<div class="clearfix"></div>
 	</div>
 </div>

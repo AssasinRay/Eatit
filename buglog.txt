@@ -7,3 +7,4 @@ Solution: in the insert statement, surround PHP variables with single quotes, an
 Date: March 7, 2016
 Bug: Failed to store username into sessionStorage.
 Solution: don't use PHP "header()" function to redirect, use JavaScript "window.location" instead. 
+Reference: http://stackoverflow.com/questions/12180437/calling-javascript-function-before-php-header

@@ -1,4 +1,58 @@
+<?php
+	// require('dbconnect.php');
+    session_start();
 
+	$server_name="engr-cpanel-mysql.engr.illinois.edu";
+	$user_name="eatiteat_Ray";
+	$dbpassword="l!Jkaqc2)Z%J";
+	$database_name="eatiteat_User";
+	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
+	$error = array();
+
+	if (!$connection){
+		// <script> alert('connection fail')</script>
+	    die("Database Connection Failed" . mysqli_connect_error());
+	}
+
+	$select_db = mysqli_select_db($connection,$database_name);
+
+	if (!$select_db){
+		// <script> alert('databaseselection fail')</script>
+	    die("Database Selection Failed" . mysql_error());
+	}
+            $username = $_SESSION['name'];
+           // echo $username;
+	if (isset($_POST['newphone'])){
+		 
+				$num = mysqli_real_escape_string($connection, $_POST['newphone']);
+				 $query = "UPDATE User SET phone_num='$num' where Username='$username' ";
+		        $result = mysqli_query($connection,$query);
+		        if($result){
+		        //	echo "user create successfully";
+		            $msg = "User Created Successfully.";
+		            // redirect to login page here
+		            header('Location: myprofile.php');
+		        }
+		        else
+		        {
+		        	die("Database error: " . mysqli_error($connection));
+		        }
+
+		 }
+    else 
+    	$errors['missing'] = "Please enter your new phone number";
+
+     function display_errors($errors=array()){
+   $output = "";
+   if (!empty($errors)){ 
+     foreach ($errors as $key => $error){
+    	$output .= "{$error}<br />";
+     }
+   }
+   return $output;
+  }
+
+?>
 
 <!DOCTYPE html>
 <html>
@@ -38,7 +92,7 @@
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
                 var outer = $('.registration-form');
-				$("#Name").text(sessionStorage.User);
+				//$("#Name").text(sessionStorage.User);
 
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
@@ -156,48 +210,25 @@
 
 <div class="registration-form">
 	<div class="container">
-		    <h3>Welcome, <span id="Name"></span></h3><br /><br />
-      <div id="buttons" align="center">
-     		<a class="hvr-shutter-in-horizontal button" id="add-item-button">ADD NEW ITEM</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">DISPLAY MY ITEMS</a>
-  		</div>
-		
-		<div id="item-form">
+		<div id="profile-info">
 			<div class="reg-form">
 				<div class="reg">
-					 <p>Please enter the following information for the new item you plan to sell.</p>
-					 <form action="register.php" method="post">
+					 <h2>Update phone number: </h2><br /><br />
+											
+						 <form action="changephone.php" method="post">
 						 <ul>
-							 <li class="text-info">Name: </li>
-							 <li><input type="text" id="username "name="username" placeholder="name of the item"></li>
-						 </ul>
-						<ul>
-							 <li class="text-info">Type: </li>
-							 <li><input type="text" id="email "name="email" placeholder="type of the item (e.g. food, drink, etc.)"></li>
-						</ul>
-						<ul>
-							 <li class="text-info">Preparation Time: </li>
-							 <li><input type="text" id="email "name="email" placeholder="can be made in _____ minutes?"></li>
-						 </ul>
-						 <ul>
-							 <li class="text-info">Nutrition info: </li>
-							 <li><input type="text" id="email "name="email" placeholder="notes on nutrition, allergens, etc."></li>
-						 </ul>
-						  <ul>
-							 <li class="text-info">Price: </li>
-							 <li><input type="text" id="email "name="email" placeholder="without the dollar sign"></li>
-						 </ul>
-								
-						 <p id="signup_error">
-						 	
+							 <li class="text-info">New Phone Number: </li>
+							 <li><input type="text" id="newphone" name="newphone" placeholder="Enter your new phone number"></li>
+						 </ul>			
+						 <p id="login_error">
+						 	<?php echo display_errors($errors); ?>
 						 </p>
-						 <div align="center">
-						 <input id="regbutton"type="submit" name="submit" value="CREATE">
-						</div>
-						 <!--
-						 <p class="click">By clicking this button, you are agree to my  <a href="#">Policy Terms and Conditions.</a></p> 
-						-->
+						 <input id="loginbutton"type="submit" name="submit" value="UPDATE">
+
 					 </form>
+
+						 
+					 
 				 </div>
 			</div>
 			<div class="clearfix"></div>

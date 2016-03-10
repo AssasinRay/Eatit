@@ -4284,3 +4284,32 @@ li.data.order-special {
   background: none;
   border: none;
 }
+
+#item-form {
+  display: none;
+  margin-top: 5%;
+  margin-left: 33%;
+  width:80%;
+}
+
+#profile-info {
+  margin-top: 5%;
+  margin-left: 33%;
+  width: 80%;
+}
+
+.modify {
+  display:inline;
+}
+
+.mod {
+  width: 47px;
+  height: 28px;
+  text-align: center;
+  line-height: 7px;
+}
+
+.user-info {
+  margin-top: 15px;
+  line-height: 1.3em;
+}

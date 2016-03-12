@@ -1,11 +1,22 @@
+<?php 
+   session_start();
+   if ($_SESSION['name']){
+   	?> 
+	<script type="text/javascript"> 
+    	sessionStorage.User = "<?php echo $_SESSION['name']; ?>"; 
+    </script>
+     <?php 
+	}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>EATIT - Home</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+		
+		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -34,17 +45,17 @@
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
 				if (!sessionStorage.User){
-					var content1 = "<li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
-						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a> </li>";
-
-					$("#basic-actions").html(content1);
+					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
+					$(".login-section").html(content1);
 				}
 				else {
-					var content2 = "<li id=\"logout_link\">";
+					var content2 = "<ul><li id=\"logout_link\">";
 						content2 += "<form action=\"logout.php\" method=\"post\">";
 						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
-						content2 += "</form></li>";
-					$("#basic-actions").html(content2);
+						content2 += "<a href=\"user.php\">My Homepage</a>";
+						content2 += "</form></li></ul>";
+					$(".login-section").html(content2);
 
 				}
 
@@ -67,9 +78,7 @@
 				</div>
 
 				<div class="login-section">
-					<ul id="basic-actions">
-						
-					</ul>	
+
 				</div>
 				<!-- start search-->
 				<!--

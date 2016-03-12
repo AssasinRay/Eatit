@@ -1,7 +1,9 @@
 <?php
-	// require('dbconnect.php');
     session_start();
 
+   if (!$_SESSION['name'])
+   		header('Location: index.php');
+   	
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -10,14 +12,14 @@
 	$userinfo = array();
 
 	if (!$connection){
-		// <script> alert('connection fail')</script>
+
 	    die("Database Connection Failed" . mysqli_connect_error());
 	}
 
 	$select_db = mysqli_select_db($connection,$database_name);
 
 	if (!$select_db){
-		// <script> alert('databaseselection fail')</script>
+
 	    die("Database Selection Failed" . mysql_error());
 	}
             $username = $_SESSION['name'];
@@ -35,23 +37,11 @@
 				$userinfo['addr'] = "<b>Address: " ."&nbsp;&nbsp;&nbsp;</b>". $row['address'];
 				$userinfo['email']= "<b>Email: " ."&nbsp;&nbsp;&nbsp;</b>". $row['email'];
 			}
-			/*
-			echo $userinfo['dbusername'];
-			echo $userinfo['pin'];
-			echo $userinfo['phone'];
-			echo $userinfo['addr'];
-			echo $userinfo['email'];
-			*/
 
    function display_info($userinfo=array()){
    $output = "";
    if (!empty($userinfo)){ 
 
-   	/*
-     foreach ($userinfo as $key => $info){
-    	$output .= "{$info}<br />";
-     }
-     */
      $output .=$userinfo['dbusername'] . "<br />";
 	$output .=$userinfo['pin'] ."<form class=\"modify\" action=\"changepin.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br />";
      $output .=$userinfo['phone'] ."<form class=\"modify\" action=\"changephone.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br />";
@@ -68,9 +58,7 @@
 <head>
 	<title>Register</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -100,8 +88,6 @@
 
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
-                var outer = $('.registration-form');
-				//$("#Name").text(sessionStorage.User);
 
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
@@ -110,6 +96,7 @@
 				$('#add-item-button').click(function(){
 					add_form.toggle(300);
 				});
+
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -128,7 +115,7 @@
 						<li id="logout_link">
 						<form action="logout.php" method="post">
 							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
-							<a href="myprofile.php">My Profile</a>
+							<a href="user.php">My Homepage</a>
 						</form>
 						</li>
 					</ul>
@@ -220,93 +207,36 @@
 <div class="registration-form">
 	<div class="container">
 		<div id="profile-info">
-			<div class="reg-form">
+			<div id="display-profile">
 				<div class="reg">
-					 <h2>Welcome. Below is your current profile information:</h2><br /><br />
+					 <h3>Your current profile: </h3><br /><br />
 							<?php echo display_info($userinfo); ?>
-						 					
-					 
+						 		
+						 <script type="text/javascript">
+							function validate(){
+							   var result=confirm("Are you sure? Upon clicking yes, your profile information will be removed permenantly from our database.");
+							   if (!result){
+							   	  return false;
+							   }
+							   else {
+							   	window.location = "delete_account.php";
+							   	return true;
+							   }
+							   	  
+							}
+						</script>					
+					    <form onsubmit="event.preventDefault(); validate();">
+					 	<input id="delete-button" type="submit" name="submit" value="DELETE ACCOUNT">
+						</form>
+						
+				
 				 </div>
 			</div>
 			<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<!--
-<div class="registration-form">
-	<div class="container">
-      <h3>Welcome, <span id="Name"></span></h3><br /><br />
-      <div id="buttons" align="center">
-     		<a class="hvr-shutter-in-horizontal button" id="add-item-button">Add New Item</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">Display My Items</a>
-  		</div>
-  		<div class="registration-grids">
-  		<div id="item_form" align="center">
-     
-     						 <p>Please enter the following information for the new item you plan to sell</p>
-					 <<form action="login.php" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
 
-					 </form>
-    
-			</div>
-	</div>
-	<div class="clearfix"></div>
-	</div>
-</div>
-<div id="item_form">
-     
-     						 <p>Welcome, please log in to continue.</p>
-					 <form action="" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 	
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
-
-					 </form>
-    
-			
-	</div>
--->
-<!-- registration-form -->
-
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">

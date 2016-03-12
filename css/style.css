@@ -26,6 +26,7 @@ padding:0;
 .header{
 	padding:14px 0;
 	background:#f65a5b;
+  height: 49px;
 }
 .header-left{
 	float:left;
@@ -4271,8 +4272,12 @@ li.data.order-special {
 }
 
 /*-- responsive media queries --*/
-#regbutton, #loginbutton {
+#regbutton, #loginbutton, #delete-button {
   margin-top: 5%;
+}
+
+#delete-button {
+  margin-left: 8%;
 }
 
 #login_error, #signup_error {
@@ -4293,7 +4298,7 @@ li.data.order-special {
 }
 
 #profile-info {
-  margin-top: 5%;
+  margin-top: 0;
   margin-left: 33%;
   width: 80%;
 }
@@ -4312,4 +4317,8 @@ li.data.order-special {
 .user-info {
   margin-top: 15px;
   line-height: 1.3em;
+}
+
+#display-profile {
+  width: 100%;
 }

@@ -1,17 +1,20 @@
-
+<?php 
+   session_start();
+   if (!$_SESSION['name'])
+   		header('Location: index.php');
+?>
 
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Register</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
-			<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+			
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -38,7 +41,8 @@
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
                 var outer = $('.registration-form');
-				$("#Name").text(sessionStorage.User);
+				
+				//$("#Name").text(sessionStorage.User);
 
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
@@ -156,7 +160,11 @@
 
 <div class="registration-form">
 	<div class="container">
-		    <h3>Welcome, <span id="Name"></span></h3><br /><br />
+		    <h3>Welcome, 
+		    	<!--<span id="Name"></span>-->
+		    	<?php echo $_SESSION['name']; ?>
+		    </h3><br /><br />
+      
       <div id="buttons" align="center">
      		<a class="hvr-shutter-in-horizontal button" id="add-item-button">ADD NEW ITEM</a>
      		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">DISPLAY MY ITEMS</a>

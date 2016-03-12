@@ -71,9 +71,7 @@
 <head>
 	<title>Login</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">

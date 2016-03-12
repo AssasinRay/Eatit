@@ -2,6 +2,9 @@
 	// require('dbconnect.php');
     session_start();
 
+       if (!$_SESSION['name'])
+   		header('Location: index.php');
+
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -74,9 +77,7 @@
 <head>
 	<title>Register</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -134,7 +135,7 @@
 						<li id="logout_link">
 						<form action="logout.php" method="post">
 							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
-							<a href="myprofile.php">My Profile</a>
+							<a href="user.php">My Homepage</a>
 						</form>
 						</li>
 					</ul>
@@ -228,7 +229,7 @@
 		<div id="profile-info">
 			<div class="reg-form">
 				<div class="reg">
-					 <h2>Change password: </h2><br /><br />
+					 <h3>Change password: </h3><br /><br />
 											
 						 <form action="changepin.php" method="post">
 						 <ul>

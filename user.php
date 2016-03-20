@@ -2,6 +2,89 @@
    session_start();
    if (!$_SESSION['name'])
    		header('Location: index.php');
+
+$server_name="engr-cpanel-mysql.engr.illinois.edu";
+	$user_name="eatiteat_Ray";
+	$dbpassword="l!Jkaqc2)Z%J";
+	$database_name="eatiteat_User";
+	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
+	$errors = array();
+
+	if (!$connection){
+	    die("Database Connection Failed" . mysqli_connect_error());
+	}
+
+	$select_db = mysqli_select_db($connection,$database_name);
+
+	if (!$select_db){
+	    die("Database Selection Failed" . mysql_error());
+	}
+
+    if (isset($_POST['itemname']) && isset($_POST['type'])  && isset($_POST['time'])
+      			&& isset($_POST['nutri-info'])  && isset($_POST['price']))
+    {
+        $username = $_SESSION['name'];
+        $itemname = mysqli_real_escape_string($connection, $_POST['itemname']);
+		$type = mysqli_real_escape_string($connection, $_POST['type']);
+        $time = mysqli_real_escape_string($connection, $_POST['time']);
+        $nutrition = mysqli_real_escape_string($connection, $_POST['nutri-info']);
+		$price = mysqli_real_escape_string($connection, $_POST['price']);
+
+        $file = $_FILES['image-upload']['tmp_name'];
+
+			$mysql_get_users = mysqli_query($connection, "SELECT * FROM Product where Username='$username' AND item_name='$itemname'");
+			$get_rows = mysqli_affected_rows($connection);
+
+			if($get_rows >=1){
+				array_push($errors, "You already have an item that named ". "$itemname");
+			}
+			
+
+            if (!ctype_alpha($type)) {
+            	array_push($errors, "Please enter a valid item type (e.g. food, drink, etc)");
+            }
+            	
+            if (!is_numeric($time) || $time < 0)
+            	array_push($errors,"Please enter a valid number for preparation time");
+
+            if (!is_numeric($price) || $price < 0)
+            	array_push($errors, "Please enter a valid price");
+  
+            if (!isset($file))
+                array_push($errors, "Please upload an image of your item");
+
+            $image = addslashes(file_get_contents($file));
+            $image_size = getimagesize($file);
+            // check to make sure it's an image, not a file of other types like text document
+            if (!$image_size)
+            	array_push($errors, "Please upload a valid image of your item");
+
+            if (empty($errors)) {
+
+	            $query = "INSERT INTO Product (Username, item_name, Type, Ready_time, Nutrition, image, Price) 
+	 			VALUES ('$username', '$itemname', '$type', '$time', '$nutrition', '$image', '$price')";
+
+		        $result = mysqli_query($connection,$query);
+		        if(!$result){
+		        	die("Database error: " . mysqli_error($connection));
+		        }
+            }
+ 			
+    }
+    else 
+    	array_push($errors, "All fields are required");
+
+
+   function display_errors($errors=array()){
+   $output = "";
+   if (!empty($errors)){ 
+     foreach ($errors as $error){
+    	$output .= "$error <br />";
+     }
+   }
+   return $output;
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +124,7 @@
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
                 var outer = $('.registration-form');
-				
+
 				//$("#Name").text(sessionStorage.User);
 
 				$("#logout_link").click(function(){
@@ -167,40 +250,51 @@
       
       <div id="buttons" align="center">
      		<a class="hvr-shutter-in-horizontal button" id="add-item-button">ADD NEW ITEM</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">DISPLAY MY ITEMS</a>
+     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">MY ITEMS</a>
+     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">MY ORDERS</a>
   		</div>
 		
 		<div id="item-form">
 			<div class="reg-form">
 				<div class="reg">
 					 <p>Please enter the following information for the new item you plan to sell.</p>
-					 <form action="register.php" method="post">
+					 <o>Having added the item successfully, the item will show up upon clicking the "MY ITEMS" button above.</p>
+					 <form action="user.php" method="post" enctype="multipart/form-data">
 						 <ul>
 							 <li class="text-info">Name: </li>
-							 <li><input type="text" id="username "name="username" placeholder="name of the item"></li>
+							 <li><input type="text" id="username "name="itemname" placeholder="name of the item"></li>
 						 </ul>
 						<ul>
 							 <li class="text-info">Type: </li>
-							 <li><input type="text" id="email "name="email" placeholder="type of the item (e.g. food, drink, etc.)"></li>
+							 <li><input type="text" id="email "name="type" placeholder="type of the item (e.g. food, drink, etc.)"></li>
 						</ul>
 						<ul>
 							 <li class="text-info">Preparation Time: </li>
-							 <li><input type="text" id="email "name="email" placeholder="can be made in _____ minutes?"></li>
+							 <li><input type="text" id="email "name="time" placeholder="can be made in _____ minutes?"></li>
 						 </ul>
 						 <ul>
 							 <li class="text-info">Nutrition info: </li>
-							 <li><input type="text" id="email "name="email" placeholder="notes on nutrition, allergens, etc."></li>
+							 <li><input type="text" id="email "name="nutri-info" placeholder="notes on nutrition, allergens, etc."></li>
 						 </ul>
 						  <ul>
 							 <li class="text-info">Price: </li>
-							 <li><input type="text" id="email "name="email" placeholder="without the dollar sign"></li>
+							 <li><input type="text" id="email "name="price" placeholder="without the dollar sign"></li>
 						 </ul>
 								
+								<ul>
+									<li class="text-info">Select an image to upload: </li>
+									<li><input type="file" id="image-upload" name="image-upload" ></li>
+								</ul>
 						 <p id="signup_error">
-						 	
+						 	<?php echo display_errors($errors); 
+                            
+                             if ($errors[0] !== "All fields are required"){
+                                ?><script>confirm("Error(s) detected in your input. \nPlease fill out the form again.");</script><?php 
+                            }
+						 	?>
 						 </p>
-						 <div align="center">
-						 <input id="regbutton"type="submit" name="submit" value="CREATE">
+						 <div align="center" style="margin-top:2%">
+						 <input type="submit" name="submit" value="CREATE">
 						</div>
 						 <!--
 						 <p class="click">By clicking this button, you are agree to my  <a href="#">Policy Terms and Conditions.</a></p> 

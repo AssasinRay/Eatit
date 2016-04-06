@@ -46,6 +46,7 @@
 				});
 				if (!sessionStorage.User){
 					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+					    content1 += " | ";
 						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
 					$(".login-section").html(content1);
 				}

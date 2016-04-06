@@ -4290,7 +4290,7 @@ li.data.order-special {
   border: none;
 }
 
-#item-form {
+#item-form, #display-form {
   display: none;
   margin-top: 5%;
   margin-left: 33%;
@@ -4321,4 +4321,25 @@ li.data.order-special {
 
 #display-profile {
   width: 100%;
+}
+
+.sel-dropdown {
+  margin-left: 3%;
+  width: 264px;
+  height: 40px;
+  border: 2px solid black;
+}
+
+#add-item-button, #show-item-button, #order-button {
+  cursor: pointer;
+}
+
+#item-img {
+    width: 41.66%;
+    height: 50%;
+    float: left;
+}
+
+#clearfloat {
+  clear:both;
 }

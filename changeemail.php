@@ -5,6 +5,8 @@
        if (!$_SESSION['name'])
    		header('Location: index.php');
 
+if (isset($_POST['submit'])){
+
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -51,6 +53,7 @@
 		 }
     else 
     	$errors['missing'] = "Please enter your new email";
+}
 
      function display_errors($errors=array()){
    $output = "";
@@ -126,7 +129,7 @@
 					<ul>
 						<li id="logout_link">
 						<form action="logout.php" method="post">
-							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> | 
 							<a href="user.php">My Homepage</a>
 						</form>
 						</li>

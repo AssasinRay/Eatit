@@ -114,7 +114,7 @@
 					<ul>
 						<li id="logout_link">
 						<form action="logout.php" method="post">
-							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> | 
 							<a href="user.php">My Homepage</a>
 						</form>
 						</li>

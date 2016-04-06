@@ -5,6 +5,8 @@
        if (!$_SESSION['name'])
    		header('Location: index.php');
 
+if (isset($_POST['submit'])){
+
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -59,6 +61,7 @@
 	}
     else 
     	$errors['missing'] = "All fields are required";
+}
 
      function display_errors($errors=array()){
    $output = "";
@@ -117,6 +120,7 @@
 				$('#add-item-button').click(function(){
 					add_form.toggle(300);
 				});
+
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -134,7 +138,7 @@
 					<ul>
 						<li id="logout_link">
 						<form action="logout.php" method="post">
-							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> | 
 							<a href="user.php">My Homepage</a>
 						</form>
 						</li>

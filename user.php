@@ -3,7 +3,9 @@
    if (!$_SESSION['name'])
    		header('Location: index.php');
 
-$server_name="engr-cpanel-mysql.engr.illinois.edu";
+if (isset($_POST['submit'])){
+
+    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
 	$database_name="eatiteat_User";
@@ -20,12 +22,13 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	    die("Database Selection Failed" . mysql_error());
 	}
 
-    if (isset($_POST['itemname']) && isset($_POST['type'])  && isset($_POST['time'])
-      			&& isset($_POST['nutri-info'])  && isset($_POST['price']))
+    if (!empty($_POST['itemname']) && ($_POST['category']!=="empty") && ($_POST['taste']!=="empty") && !empty($_POST['time'])
+      			&& !empty($_POST['nutri-info'])  && !empty($_POST['price']))
     {
         $username = $_SESSION['name'];
         $itemname = mysqli_real_escape_string($connection, $_POST['itemname']);
-		$type = mysqli_real_escape_string($connection, $_POST['type']);
+		$type = $_POST['category'];
+		$taste = $_POST['taste'];
         $time = mysqli_real_escape_string($connection, $_POST['time']);
         $nutrition = mysqli_real_escape_string($connection, $_POST['nutri-info']);
 		$price = mysqli_real_escape_string($connection, $_POST['price']);
@@ -38,12 +41,7 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 			if($get_rows >=1){
 				array_push($errors, "You already have an item that named ". "$itemname");
 			}
-			
-
-            if (!ctype_alpha($type)) {
-            	array_push($errors, "Please enter a valid item type (e.g. food, drink, etc)");
-            }
-            	
+	
             if (!is_numeric($time) || $time < 0)
             	array_push($errors,"Please enter a valid number for preparation time");
 
@@ -61,8 +59,8 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 
             if (empty($errors)) {
 
-	            $query = "INSERT INTO Product (Username, item_name, Type, Ready_time, Nutrition, image, Price) 
-	 			VALUES ('$username', '$itemname', '$type', '$time', '$nutrition', '$image', '$price')";
+	            $query = "INSERT INTO Product (Username, item_name, Type, Ready_time, Nutrition, image, Price, Taste) 
+	 			VALUES ('$username', '$itemname', '$type', '$time', '$nutrition', '$image', '$price', '$taste')";
 
 		        $result = mysqli_query($connection,$query);
 		        if(!$result){
@@ -73,7 +71,7 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
     }
     else 
     	array_push($errors, "All fields are required");
-
+}
 
    function display_errors($errors=array()){
    $output = "";
@@ -101,8 +99,6 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -123,7 +119,10 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
+                var display_form = $('#display-form');
                 var outer = $('.registration-form');
+                var items = $('#all-items');
+
 
 				//$("#Name").text(sessionStorage.User);
 
@@ -132,7 +131,24 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 				});
 
 				$('#add-item-button').click(function(){
+					display_form.hide();
 					add_form.toggle(300);
+				});
+
+				$('#show-item-button').click(function(){
+                    add_form.hide();
+                    var user = "<?php echo $_SESSION['name']; ?>";
+                    $.post('getitems.php', {name: user}, function(data){
+                        var images = $('.item-img');
+                        for (var i=0;i<images.length;i++){
+                        	if (images[i].height){
+                               
+                        	}
+                        }
+                        items.html(data);
+                        display_form.show(200);
+                    });
+                    
 				});
 			});
 		</script>
@@ -151,7 +167,7 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 					<ul>
 						<li id="logout_link">
 						<form action="logout.php" method="post">
-							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/>
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> |
 							<a href="myprofile.php">My Profile</a>
 						</form>
 						</li>
@@ -233,7 +249,6 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 							</div>
 							<!-- //point burst circle -->
 							
-							
 						</div>
 					</div>
 	</div>
@@ -250,8 +265,8 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
       
       <div id="buttons" align="center">
      		<a class="hvr-shutter-in-horizontal button" id="add-item-button">ADD NEW ITEM</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">MY ITEMS</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">MY ORDERS</a>
+     		<a class="hvr-shutter-in-horizontal button" id="show-item-button" name="show-item" style="margin-left:1%">MY ITEMS</a>
+     		<a class="hvr-shutter-in-horizontal button" id="order-button" style="margin-left:1%">MY ORDERS</a>
   		</div>
 		
 		<div id="item-form">
@@ -265,8 +280,29 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 							 <li><input type="text" id="username "name="itemname" placeholder="name of the item"></li>
 						 </ul>
 						<ul>
-							 <li class="text-info">Type: </li>
-							 <li><input type="text" id="email "name="type" placeholder="type of the item (e.g. food, drink, etc.)"></li>
+							 <li class="text-info">Category: </li>
+							 <select class="sel-dropdown" name="category">
+							  <option value="empty" ></option> 	
+							  <option value="dessert" >Desserts</option>
+							  <option value="snack">Snacks/Appetizers</option>
+							  <option value="entree">Entrees</option>
+							  <option value="salad">Salads</option>
+							  <option value="burger">Burgers/Sandwiches</option>
+							  <option value="drink">Drinks</option>
+							  <option value="other">Other</option>
+							</select>
+						</ul>
+						<ul>
+							 <li class="text-info">Taste: </li>
+							 <select class="sel-dropdown" name="taste">
+							  <option value="empty" ></option> 	
+							  <option value="sweet">Sweet</option>
+							  <option value="sweet-sour">Sweet/Sour</option>
+							  <option value="salty">Salty</option>
+							  <option value="spicy">Spicy</option>
+							  <option value="bitter">Bitter</option>
+							  <option value="other">Other</option>
+							</select>
 						</ul>
 						<ul>
 							 <li class="text-info">Preparation Time: </li>
@@ -282,14 +318,14 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 						 </ul>
 								
 								<ul>
-									<li class="text-info">Select an image to upload: </li>
+									<li class="text-info">Upload an Image of the Item: </li>
 									<li><input type="file" id="image-upload" name="image-upload" ></li>
 								</ul>
 						 <p id="signup_error">
 						 	<?php echo display_errors($errors); 
                             
-                             if ($errors[0] !== "All fields are required"){
-                                ?><script>confirm("Error(s) detected in your input. \nPlease fill out the form again.");</script><?php 
+                             if (sizeof($errors) > 0){
+                                ?><script>alert("Error(s) detected in your input. \nPlease fill out the form again.");</script><?php 
                             }
 						 	?>
 						 </p>
@@ -304,83 +340,20 @@ $server_name="engr-cpanel-mysql.engr.illinois.edu";
 			</div>
 			<div class="clearfix"></div>
 		</div>
-	</div>
-</div>
-<!--
-<div class="registration-form">
-	<div class="container">
-      <h3>Welcome, <span id="Name"></span></h3><br /><br />
-      <div id="buttons" align="center">
-     		<a class="hvr-shutter-in-horizontal button" id="add-item-button">Add New Item</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">Display My Items</a>
-  		</div>
-  		<div class="registration-grids">
-  		<div id="item_form" align="center">
-     
-     						 <p>Please enter the following information for the new item you plan to sell</p>
-					 <<form action="login.php" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
+ 
+        <!--display items form -->
+        <div id="display-form">
+			<div class="reg-form">
+				<div class="reg" id="all-items">
 
-					 </form>
-    
+        	    </div>
 			</div>
-	</div>
-	<div class="clearfix"></div>
+			<div class="clearfix"></div>
+		</div>
+
 	</div>
 </div>
-<div id="item_form">
-     
-     						 <p>Welcome, please log in to continue.</p>
-					 <form action="" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 	
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
 
-					 </form>
-    
-			
-	</div>
--->
-<!-- registration-form -->
-
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">

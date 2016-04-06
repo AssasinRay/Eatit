@@ -1,6 +1,8 @@
 <?php 
   
     session_start();
+
+if (isset($_POST['submit'])){
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$password="l!Jkaqc2)Z%J";
@@ -54,6 +56,7 @@
 	}
     else 
     	$errors['missing'] = "All fields are required";
+}
 
      function display_errors($errors=array()){
    $output = "";

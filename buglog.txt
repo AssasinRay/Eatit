@@ -23,5 +23,5 @@ Solution: http://stackoverflow.com/questions/5525830/displaying-an-image-stored-
 #5
 Date: April 11, 2016
 Bug: Pages are extremely slow to load (very long loading time)
-Solution: The problem is caused by the numerous external fonts. Replaced them with two similar fonts from Google Fonts.
+Solution: The problem is caused by the numerous external fonts that the original template uses. Replaced them with two similar fonts from Google Fonts.
 Performance boost: Take register.php as an example, before the page can't finish loading in 2 minutes; after, the page finishes loading in 261ms. 

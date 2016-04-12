@@ -34,11 +34,19 @@
        echo "Nutrition Info: ". $row["Nutrition"] . "<br />";
        echo "Price: $". $row["Price"] . "<br />";
        echo "Date Added: " . $row['Date_add'] . "<br />";
+      /*
+       ?><script>
+         sessionStorage.item_del = <?php echo $row["item_name"]; ?>;
+       </script><?php
+     */
+       $temp = $row["item_name"];
+       echo '<button id="delete-item" onclick="delete_item(\'' .$temp . '\')">DELETE ITEM</button>';
+      
+      // echo "<button id=\"delete-item\" >DELETE ITEM</button>";
        echo "<div id='clearfloat'></div>";
        echo "<hr />"; 
        echo "</div>";
     } 
-
 
     //$array = mysqli_fetch_all($result, MYSQLI_ASSOC);
     //echo json_encode($array);

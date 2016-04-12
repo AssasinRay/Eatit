@@ -1,5 +1,13 @@
 <?php
 	// require('dbconnect.php');
+session_start();
+if (isset($_POST['search'])){
+     $_SESSION['queryString'] = $_POST['search'];
+     //echo $_SESSION['queryString'];
+     header('Location: results.php');
+   	  
+}
+
 if (isset($_POST['submit'])){
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -27,8 +35,10 @@ if (isset($_POST['submit'])){
 
         $username = mysqli_real_escape_string($connection, $_POST['username']);
 		$email = mysqli_real_escape_string($connection, $_POST['email']);
-        $password = mysqli_real_escape_string($connection, $_POST['password']);
+        $temp = mysqli_real_escape_string($connection, $_POST['password']);
+
         $repassword = mysqli_real_escape_string($connection, $_POST['repassword']);
+
 		$address = mysqli_real_escape_string($connection, $_POST['address']);
         $phonenumber = mysqli_real_escape_string($connection, $_POST['phonenumber']);
 
@@ -49,12 +59,13 @@ if (isset($_POST['submit'])){
 				$errors['email'] = "Email has been taken. Please use another email address";
 			}
 
-            if ($password!=$repassword) 
+            if ($temp!=$repassword) 
             	$errors['password'] = "Passwords do not match";
 
             if (empty($errors)) {
+            	//$password = password_hash($temp, PASSWORD_DEFAULT);
 	            $query = "INSERT INTO User (Username, PASSWORD, phone_num,address, email) 
-	 			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
+	 			VALUES ('$username', '$temp', '$phonenumber', '$address', '$email')";
 	//  			$query="INSERT INTO User( Username, 
 	// PASSWORD , phone_num, address, email ) 
 	// VALUES (
@@ -87,6 +98,10 @@ if (isset($_POST['submit'])){
    }
    return $output;
   }
+
+  function query(){
+    
+  }
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +109,9 @@ if (isset($_POST['submit'])){
 <head>
 	<title>Register</title>
 	<!--fonts-->
-		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
+			    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -122,7 +139,9 @@ if (isset($_POST['submit'])){
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-				/*
+                /*
+				var search_box = $('#search');
+				
 				$('#repassword').blur(function(){
 					var pin = $('#password').val();
 					var repin = $('#repassword').val();
@@ -130,7 +149,17 @@ if (isset($_POST['submit'])){
 						$('#regerror').text("*Your password doesn't match");
 					else 
 						$('#regerror').text("");
-				}); */
+				}); 
+			    search_box.keypress(function(key){
+			    	if (key.which == 13){
+			    		key.preventDefault();
+			    		var queryText = search_box.val();
+			    		if (!queryText) return;
+
+			    		//alert(queryText);
+
+			    	}
+			    })*/
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -153,7 +182,7 @@ if (isset($_POST['submit'])){
 				<!-- start search-->
 				    <div class="search-box">
 					    <div id="sb-search" class="sb-search">
-							<form>
+							<form action="register.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>

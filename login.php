@@ -74,7 +74,8 @@ if (isset($_POST['submit'])){
 <head>
 	<title>Login</title>
 	<!--fonts-->
-		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
+		    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">

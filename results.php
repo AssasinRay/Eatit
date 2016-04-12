@@ -1,62 +1,67 @@
-<?php
-    session_start();
-
-   if (!$_SESSION['name'])
-   		header('Location: index.php');
+<?php 
+   session_start();
+/*
+   	if (!$_SESSION['queryString'])
+   		header('Location: user.php');
+*/
+  // echo $_SESSION['queryString'];
    	
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
 	$database_name="eatiteat_User";
 	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
-	$userinfo = array();
+	$items = array();
+	$users = array();
 
 	if (!$connection){
-
-	    die("Database Connection Failed" . mysqli_connect_error());
+	    die("Database Connection Failed");
 	}
-
 	$select_db = mysqli_select_db($connection,$database_name);
-
 	if (!$select_db){
-
-	    die("Database Selection Failed" . mysql_error());
+	    die("Database Selection Failed");
 	}
-            $username = $_SESSION['name'];
+            $query = $_SESSION['queryString'];
            // echo $username;
-			$result = mysqli_query($connection, "SELECT * FROM User where Username='$username'");
-
+			$result = mysqli_query($connection, "SELECT * FROM Product where item_name like '%$query%' ");
 			while($row = mysqli_fetch_assoc($result)){
-  		 	   	$length=strlen($row['password']);
-				$userinfo['dbusername'] = "<div class=\"user-info\"><b>Username: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
-				$pin = "";
-				for ($i=0; $i<$length; $i++)
-					$pin.="*";
-				$userinfo['pin'] = "<b>Password: " ."&nbsp;&nbsp;&nbsp;</b>". $pin;
-				$userinfo['phone'] = "<b>Phone: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['phone_num'];
-				$userinfo['addr'] = "<b>Address: " ."&nbsp;&nbsp;&nbsp;</b>". $row['address'];
-				$userinfo['email']= "<b>Email: " ."&nbsp;&nbsp;&nbsp;</b>". $row['email'];
+				$newItem = array();
+				$newItem['item_name'] = "<div class=\"user-info\"><b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
+				$newItem['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
+				$newItem['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
+				$newItem['Ready_time'] = "<b>Prep time: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Ready_time'];
+				$newItem['Nutrition']= "<b>Nutrition Info: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Nutrition'];
+			    $newItem['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
+			    $newItem['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
+			    array_push($items, $newItem);
 			}
 
-   function display_info($userinfo=array()){
+
+	function display_item($userinfo=array()){
    $output = "";
    if (!empty($userinfo)){ 
+   	for ($i = 0; $i < sizeof($userinfo); $i++){
+     $output .=$userinfo[$i]['item_name'] . "<br />";
+	$output .=$userinfo[$i]['Type'] . "<br />" ;
+     $output .=$userinfo[$i]['Taste'] . "<br />"; 
+     $output .=$userinfo[$i]['Ready_time'] . "<br />";
+     $output .=$userinfo[$i]['Nutrition'] . "<br />";
+     $output .=$userinfo[$i]['Price'] . "<br />";
+     $output .=$userinfo[$i]['Date'] . "<br />";
+     $output .= "</div>";
+     $output .= "<br /><br /><br />";
+    }
 
-     $output .=$userinfo['dbusername'] . "<br />";
-	$output .=$userinfo['pin'] ."<form class=\"modify\" action=\"changepin.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br />";
-     $output .=$userinfo['phone'] ."<form class=\"modify\" action=\"changephone.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br />";
-     $output .=$userinfo['addr'] ."<form class=\"modify\" action=\"changeaddr.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br />";
-     $output .=$userinfo['email'] ."<form class=\"modify\" action=\"changeemail.php\" method=\"post\" >" . "&nbsp;&nbsp;&nbsp;". "<button class=\"mod\" type=\"submit\" name=\"submit\" >Edit</button></form>". "<br /></div>";
-
+   //  $output .= "</div>";
    }
    return $output;
-  }
+  }		
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Register</title>
+	<title>Search Results</title>
 	<!--fonts-->
 	    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
@@ -86,18 +91,11 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-
-				//$("#Name").text(sessionStorage.User);
-                var add_form = $('#item-form');
-
-				$("#logout_link").click(function(){
-					sessionStorage.clear();
+				/*
+				$("#loginbutton").click(function(){
+					sessionStorage.User = $('#username').val();
 				});
-
-				$('#add-item-button').click(function(){
-					add_form.toggle(300);
-				});
-
+*/
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -113,12 +111,8 @@
 				</div>
 				<div class="login-section">
 					<ul>
-						<li id="logout_link">
-						<form action="logout.php" method="post">
-							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> | 
-							<a href="user.php">My Homepage</a>
-						</form>
-						</li>
+						<li><a href="login.php">Login</a>  </li> |
+						<li><a href="register.php">Register</a> </li>
 					</ul>
 				</div>
 				<!-- start search-->
@@ -197,47 +191,51 @@
 							</div>
 							<!-- //point burst circle -->
 							
-							
 						</div>
 					</div>
 	</div>
 </div>
-<!-- //banner -->
-<!-- registration-form -->
 
-<div class="registration-form">
+<!-- //banner -->
+<!-- login-page -->
+<div class="login">
 	<div class="container">
-		<div id="profile-info">
-			<div id="display-profile">
-				<div class="reg">
-					 <h3>Your current profile: </h3><br /><br />
-							<?php echo display_info($userinfo); ?>
-						 		
-						 <script type="text/javascript">
-							function validate(){
-							   var result=confirm("Are you sure? Upon clicking yes, your profile information will be removed permenantly from our database.");
-							   if (!result){
-							   	  return false;
-							   }
-							   else {
-							   	window.location = "delete_account.php";
-							   	return true;
-							   }
-							   	  
-							}
-						</script>					
-					    <form onsubmit="event.preventDefault(); validate();">
-					 	<input id="delete-button" type="submit" name="submit" value="DELETE ACCOUNT">
-						</form>
-						
-				
-				 </div>
-			</div>
+		<div class="login-grids">
+		   <?php echo display_item($items); ?>
+
 			<div class="clearfix"></div>
 		</div>
 	</div>
+			
 </div>
-
+<!-- //login-page -->
+<!-- footer-top -->
+<!--
+<div class="footer-top">
+	<div class="container">
+		<div class="col-md-3 footer-grid">
+			<h3><a href="#">FAVORITES</a></h3>
+		</div>
+		<div class="col-md-3 footer-grid">
+			<h4>BUFFET</h4>
+			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
+		</div>
+		<div class="col-md-3 footer-grid">
+			<h4>ORDERS</h4>
+			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
+		</div>
+		<div class="col-md-3 footer-grid">
+			<h4>ADDRESS</h4>
+			<ul>
+				<li class="list-one">Lorem ipsy street, Newyork</li>
+				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
+				<li class="list-three">+8 800 555 555 55</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+-->
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">
@@ -260,19 +258,7 @@
 </div>
 <!-- //footer -->
 <!-- smooth scrolling -->
-	<script type="text/javascript">
-		$(document).ready(function() {
-		/*
-			var defaults = {
-			containerID: 'toTop', // fading element id
-			containerHoverID: 'toTopHover', // fading element hover id
-			scrollSpeed: 1200,
-			easingType: 'linear' 
-			};
-		*/								
-		$().UItoTop({ easingType: 'easeOutQuart' });
-		});
-	</script>
+	
 	<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 <!-- //smooth scrolling -->
 

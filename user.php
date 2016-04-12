@@ -83,6 +83,16 @@ if (isset($_POST['submit'])){
    return $output;
   }
 
+/*
+   function delete_item($item){
+         ?><script>alert("called"); </script><?php
+         $query = "DELETE from Product where item_name = '$item' " ;
+         $result = mysqli_query($connection, $query);
+         if (!$result)
+            echo "Unknown Error: failed to delete item";
+     }
+*/
+
 ?>
 
 <!DOCTYPE html>
@@ -90,8 +100,10 @@ if (isset($_POST['submit'])){
 <head>
 	<title>Register</title>
 	<!--fonts-->
+    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-		<link href='css/fonts.css' rel='stylesheet' type='text/css'>
+	
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -139,18 +151,29 @@ if (isset($_POST['submit'])){
                     add_form.hide();
                     var user = "<?php echo $_SESSION['name']; ?>";
                     $.post('getitems.php', {name: user}, function(data){
-                        var images = $('.item-img');
-                        for (var i=0;i<images.length;i++){
-                        	if (images[i].height){
-                               
-                        	}
-                        }
                         items.html(data);
                         display_form.show(200);
                     });
                     
 				});
 			});
+
+           function delete_item(item){
+           	   //alert(item);
+           	   alert('Delete called!');
+           	   
+           	   var target = item;
+               $.ajax({
+                   url: 'delete-item.php',
+                   data: {item_name: target},
+                   type: 'POST',
+                   success: function(){
+                   	   alert('success');
+                   }
+ 
+               });
+
+           }
 		</script>
 	<!-- start-smoth-scrolling -->
 

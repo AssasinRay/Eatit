@@ -19,3 +19,8 @@ Solution: surround PHP tag with double quotes
 Date: March 27, 2016
 Bug: can't display the image stored in database, only random characters get displayed.
 Solution: http://stackoverflow.com/questions/5525830/displaying-an-image-stored-in-a-mysql-blob
+
+#5
+Date: April 11, 2016
+Bug: Pages are extremely slow to load (very long loading time)
+Solution: The problem is caused by the numerous external fonts. Replaced them with two similar fonts from Google Fonts.

@@ -1,13 +1,10 @@
 <?php 
    session_start();
-   if ($_SESSION['name']){
-   	?> 
-	<script type="text/javascript"> 
-    	sessionStorage.User = "<?php echo $_SESSION['name']; ?>"; 
-    </script>
-     <?php 
-	}
-
+if (isset($_POST['search'])){
+     $_SESSION['queryString'] = $_POST['search'];
+     //echo $_SESSION['queryString'];
+     header('Location: results.php');
+}
 ?>
 
 <!DOCTYPE html>
@@ -24,8 +21,6 @@
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -44,25 +39,30 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-				if (!sessionStorage.User){
+
+				var User = "<?php echo $_SESSION['name']; ?>";
+				if (!User){
 					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
 					    content1 += " | ";
 						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
 					$(".login-section").html(content1);
 				}
 				else {
-					var content2 = "<ul><li id=\"logout_link\">";
-						content2 += "<form action=\"logout.php\" method=\"post\">";
+					   var content2 = "<ul><li id=\"logout_link\">";
+					    content2 += "<form action=\"logout.php\" method=\"post\">";
 						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
+						content2　+= " | ";
 						content2 += "<a href=\"user.php\">My Homepage</a>";
 						content2 += "</form></li></ul>";
 					$(".login-section").html(content2);
 
 				}
 
+/*
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
 				});
+*/
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -73,44 +73,30 @@
 <div class="header">
 	<div class="container">
 		<div class="top-header">
-				
 				<div class="header-left">
-				<!--	<p>Place your order and get 20% off on each price</p> -->
+					<!--<p>Place your order and get 20% off on each price</p>-->
 				</div>
-
 				<div class="login-section">
-
+	
 				</div>
 				<!-- start search-->
-				<!--
 				    <div class="search-box">
 					    <div id="sb-search" class="sb-search">
-							<form>
+							<form action="register.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>
 							</form>
 						</div>
 				    </div>
-				-->
 					<!-- search-scripts -->
-					<!--
 					<script src="js/classie.js"></script>
 					<script src="js/uisearch.js"></script>
 						<script>
 							new UISearch( document.getElementById( 'sb-search' ) );
 						</script>
-					-->
 				<!-- //search-scripts -->
-
 				<div class="header-right">
-					
-							<form id="sb-search" class="sb-search">
-								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
-								<input class="sb-search-submit" type="submit" value="">
-								<span class="sb-icon-search"> </span>
-							</form>
-						
 					<!--
 						<div class="cart box_1">
 							<a href="checkout.html">

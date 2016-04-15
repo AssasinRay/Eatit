@@ -4,8 +4,6 @@
    	if (!$_SESSION['queryString'])
    		header('Location: user.php');
 */
-  // echo $_SESSION['queryString'];
-   	
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -21,9 +19,15 @@
 	if (!$select_db){
 	    die("Database Selection Failed");
 	}
-            $query = $_SESSION['queryString'];
+	 
+	        if ($_SESSION['queryString'])
+            	$query = $_SESSION['queryString'];
+            else
+            	$query = $_POST['search'];
            // echo $username;
+
 			$result = mysqli_query($connection, "SELECT * FROM Product where item_name like '%$query%' ");
+
 			while($row = mysqli_fetch_assoc($result)){
 				$newItem = array();
 				$newItem['item_name'] = "<div class=\"user-info\"><b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
@@ -36,6 +40,21 @@
 			    array_push($items, $newItem);
 			}
 
+             /*
+			$result2 =  mysqli_query($connection, "SELECT * FROM User where Username like '%$query%' ");
+			while($row = mysqli_fetch_assoc($result2)){
+				$newItem = array();
+				$newItem['item_name'] = "<div class=\"user-info\"><b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
+				
+			    array_push($items, $newItem);
+			}
+		    */
+
+			if (!empty($items))
+				 $_SESSION["h3"] = "We've found the following items for you: ";
+			else
+			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
+  	        
 
 	function display_item($userinfo=array()){
    $output = "";
@@ -49,11 +68,9 @@
      $output .=$userinfo[$i]['Price'] . "<br />";
      $output .=$userinfo[$i]['Date'] . "<br />";
      $output .= "</div>";
-     $output .= "<br /><br /><br />";
+     $output .= "<br /><br />";
     }
-
-   //  $output .= "</div>";
-   }
+   }  
    return $output;
   }		
 ?>
@@ -91,15 +108,37 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-				/*
-				$("#loginbutton").click(function(){
-					sessionStorage.User = $('#username').val();
-				});
-*/
-			});
-		</script>
-	<!-- start-smoth-scrolling -->
 
+                var User = "<?php echo $_SESSION['name']; ?>";
+				if (!User){
+					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+					    content1 += " | ";
+						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
+					$(".login-section").html(content1);
+				}
+				else {
+					var content2 = "<ul><li id=\"logout_link\">";
+						content2 += "<form action=\"logout.php\" method=\"post\">";
+						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
+						content2　+= " | ";
+						content2 += "<a href=\"user.php\">My Homepage</a>";
+						content2 += "</form></li></ul>";
+					$(".login-section").html(content2);
+				}
+				/*
+				var msg = "<?php echo $_SESSION['h3'];?>";
+				if (!msg)
+				   document.getElementById('message').innerHTML = "Sorry, no matching results were found.";
+				else
+					document.getElementById('message').innerHTML = "We've found the following items for you: ";
+				*/
+			});
+          /*
+	         window.onbeforeunload = function(){
+	         	return "Refreshing the page will erase the results from your last query. Please start a new search.";
+	         }
+	         */
+		</script>
 </head>
 <body>
 <!-- header -->
@@ -118,7 +157,7 @@
 				<!-- start search-->
 				    <div class="search-box">
 					    <div id="sb-search" class="sb-search">
-							<form>
+							<form action="results.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>
@@ -201,41 +240,18 @@
 <div class="login">
 	<div class="container">
 		<div class="login-grids">
-		   <?php echo display_item($items); ?>
+			<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
+		   <?php echo display_item($items); 
+		    $_SESSION['queryString'] = "";
+		    /* $_POST['search'] = "";
+		     $_SESSION["h3"] = ""; */
+		   ?>
 
 			<div class="clearfix"></div>
 		</div>
 	</div>
 			
 </div>
-<!-- //login-page -->
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">

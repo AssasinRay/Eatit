@@ -1,96 +1,25 @@
 <?php 
-  
-    session_start();
-if (isset($_POST['search'])){
-     $_SESSION['queryString'] = $_POST['search'];
-     //echo $_SESSION['queryString'];
-     header('Location: results.php');
-}
+   session_start();
 
-
-if (isset($_POST['submit'])){
-	$server_name="engr-cpanel-mysql.engr.illinois.edu";
-	$user_name="eatiteat_Ray";
-	$password="l!Jkaqc2)Z%J";
-	$database_name="eatiteat_User";
-	$connection = mysqli_connect($server_name,$user_name, $password);
-	$errors = array();
-
-	if (!$connection){
-		// <script> alert('connection fail')</script>
-	    die("Database Connection Failed" . mysqli_connect_error());
-	}
-
-	$select_db = mysqli_select_db($connection,$database_name);
-
-	if (!$select_db){
-		// <script> alert('databaseselection fail')</script>
-	    die("Database Selection Failed" . mysql_error());
-	}
-
-	if (isset($_POST['username']) && isset($_POST['password'])){
-         $username = mysqli_real_escape_string($connection, $_POST['username']);
-		 $inputpin = $_POST['password'];
-         
-         $result = mysqli_query($connection, "SELECT * FROM User where Username='$username'");
-		 $get_rows= mysqli_affected_rows($connection);
-
-		 if($get_rows != 0){
-			while($row = mysqli_fetch_assoc($result)){
-				$dbusername = $row['Username'];
-				$dbpin = $row['password'];
-			}
-			if ($dbpin != $inputpin)
-			   $errors['combination'] = "Please double check your username/password";
-			else {
-				$_SESSION['name'] = $username;
-				?> 
-				<script type="text/javascript"> 
-				var name = "<?php echo $dbusername ?>";
-				sessionStorage.User = name;
-				//alert(sessionStorage.User);
-				window.location = "user.php";
-				</script>
-				<?php
-			//	$_SESSION['name'] = $username;
-			//	header('Location: user.php');
-			}
-		 }
-		 else
-		 	$errors['notfound'] = "User not found";
-
-	}
-    else 
-    	$errors['missing'] = "All fields are required";
-}
-
-     function display_errors($errors=array()){
-   $output = "";
-   if (!empty($errors)){ 
-     foreach ($errors as $key => $error){
-    	$output .= "{$error}<br />";
-     }
-   }
-   return $output;
-  }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login</title>
+	<title>Chat</title>
 	<!--fonts-->
-		    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+	    <link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
 			<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+			<link href="css/chatpage.css" rel="stylesheet" type="text/css" media="all" />
+
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -112,8 +41,96 @@ if (isset($_POST['submit'])){
 				$("#loginbutton").click(function(){
 					sessionStorage.User = $('#username').val();
 				});
-*/
+*/              
+                var User = "<?php echo $_SESSION['name']; ?>";
+				if (!User){
+					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+					    content1 += " | ";
+						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
+					$(".login-section").html(content1);
+				}
+				else {
+					var content2 = "<ul><li id=\"logout_link\">";
+						content2 += "<form action=\"logout.php\" method=\"post\">";
+						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
+						content2　+= " | ";
+						content2 += "<a href=\"user.php\">My Homepage</a>";
+						content2 += "</form></li></ul>";
+					$(".login-section").html(content2);
+
+				}
+
+					$.ajaxSetup({cache: false});
+					    var lastMsg = "";
+						setInterval(function(){
+						/*	var temp = "<div></div>";
+							temp.load('logs.php');
+							$displayArea.append(temp);
+							*/
+							$.get("logs.php", {}, function(resp) {
+								if (resp !== lastMsg || lastMsg.length===0)
+							     $displayArea.append(resp);
+							    else
+							      lastMsg = resp;
+							});
+						}, 2000);
+
+ 	            // handle the chat
+				$inputArea = $('#inputMessage');
+				$displayArea = $('#display');
+				$inputArea.keypress(function(key){
+			         if (key.which === 13) {
+			         	key.preventDefault();
+			         	var msg = getMsg();
+			         	if (!msg) return;
+			         	clearMsg();
+			 
+                       // sendAJAX(User, msg);
+                       /*
+                        var xmlhttp = new XMLHttpRequest();
+            			xmlhttp.onreadystatechange = function(){
+	            		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+	            			alert("2");
+	            			
+	            		//	var newMsg = document.createTextNode(xmlhttp.responseText);
+	            		//	var newP = document.createElement('p');
+	            		//	newP.appendChild(newMsg);
+	            			
+	            			alert(xmlhttp.responseText);
+	            			var content = "<p>" + xmlhttp.responseText + "</p><br />";
+	            			document.getElementById('display').appendChild(content);
+	            		}
+	            		xmlhttp.open('GET', 'insert.php?uname='+User+'msg='+msg, true);
+	            		xmlhttp.send();
+				       }
+						*/
+						$.ajax({
+							  url: "insert.php",
+							  type: "get", 
+							  data:{uname:User, msg: msg},
+							  success: function(response) {
+							    var content = "<p>" + response + "</p>";
+	            				$displayArea.append(content);
+							  },
+							  error: function(xhr) {
+							    console.log("AJAX failed");
+							  }
+							});
+
+				   }
+				});
+						
 			});
+
+			function getMsg(){
+				return document.getElementById('inputMessage').value;
+			}
+
+			function clearMsg(){
+				document.getElementById('inputMessage').value = "";
+			}
+
+            
 		</script>
 	<!-- start-smoth-scrolling -->
 
@@ -127,15 +144,12 @@ if (isset($_POST['submit'])){
 					<!--<p>Place your order and get 20% off on each price</p>-->
 				</div>
 				<div class="login-section">
-					<ul>
-						<li><a href="login.php">Login</a>  </li> |
-						<li><a href="register.php">Register</a> </li>
-					</ul>
+	
 				</div>
 				<!-- start search-->
 				    <div class="search-box">
 					    <div id="sb-search" class="sb-search">
-							<form action="login.php" method="post">
+							<form>
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>
@@ -215,66 +229,36 @@ if (isset($_POST['submit'])){
 
 <!-- //banner -->
 <!-- login-page -->
+<!--
 <div class="login">
 	<div class="container">
 		<div class="login-grids">
-			<div class="col-md-6 log">
-					 <h3>LOGIN</h3>
-					 <div class="strip"></div>
-					 <p>Welcome, please log in to continue.</p>
-					 <form action="login.php" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 	<?php echo display_errors($errors); ?>
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
+			
 
-					 </form>
-					 <!--
-					<a href="#">Forgot Password ?</a>
-				-->
-			</div>
-			<div class="col-md-6 login-right">
-					<h3>NEW REGISTRATION</h3>
-					<div class="strip"></div>
-					<p>By creating an account with our store, you will be able to move through the checkout process faster, store multiple shipping addresses, view and track your orders in your account and more.</p>
-					<a href="register.php" class="hvr-shutter-in-horizontal button">CREATE AN ACCOUNT</a>
-			</div>
 			<div class="clearfix"></div>
 		</div>
 	</div>
+			
 </div>
-<!-- //login-page -->
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
+-->   
+	<div id="display">
+
 	</div>
-</div>
+
+	
+	<div class="inputArea" align="center">
+		<div id="heading">
+		
+	</div>
+	<textarea id="inputMessage" placeholder="Enter your message here" maxlength="140"></textarea>
+	
+	<!--
+	<button id="send">Send</button>
+	<span id="footer">&copy; 2016 Daocun Yang  <span>
 -->
+	
+</div>
+
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">
@@ -300,6 +284,6 @@ if (isset($_POST['submit'])){
 	
 	<a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 <!-- //smooth scrolling -->
-
+<!--<script src="js/chat.js"></script>-->
 </body>
 </html>

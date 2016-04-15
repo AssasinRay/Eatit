@@ -5,6 +5,13 @@
        if (!$_SESSION['name'])
    		header('Location: index.php');
 
+if (isset($_POST['search'])){
+     $_SESSION['queryString'] = $_POST['search'];
+     //echo $_SESSION['queryString'];
+     header('Location: results.php');
+}
+
+
 if (isset($_POST['submit'])){
 
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
@@ -138,8 +145,8 @@ if (isset($_POST['submit'])){
 				</div>
 				<!-- start search-->
 				    <div class="search-box">
-					    <div id="sb-search" class="sb-search">
-							<form>
+						<div id="sb-search" class="sb-search">
+							<form action="changeemail.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>

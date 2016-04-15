@@ -5,7 +5,6 @@ if (isset($_POST['search'])){
      $_SESSION['queryString'] = $_POST['search'];
      //echo $_SESSION['queryString'];
      header('Location: results.php');
-   	  
 }
 
 if (isset($_POST['submit'])){

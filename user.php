@@ -3,6 +3,14 @@
    if (!$_SESSION['name'])
    		header('Location: index.php');
 
+if (isset($_POST['search'])){
+     $_SESSION['queryString'] = $_POST['search'];
+     //echo $_SESSION['queryString'];
+     header('Location: results.php');
+     exit();
+}
+
+
 if (isset($_POST['submit'])){
 
     $server_name="engr-cpanel-mysql.engr.illinois.edu";
@@ -30,8 +38,11 @@ if (isset($_POST['submit'])){
 		$type = $_POST['category'];
 		$taste = $_POST['taste'];
         $time = mysqli_real_escape_string($connection, $_POST['time']);
-        $nutrition = mysqli_real_escape_string($connection, $_POST['nutri-info']);
+        $nutrition = $_POST['nutri-info'];
+       // $calories = preg_match_all('!\d+!', $nutrition, $matches);
+       // $calories = $calories[0];
 		$price = mysqli_real_escape_string($connection, $_POST['price']);
+
 
         $file = $_FILES['image-upload']['tmp_name'];
 
@@ -53,14 +64,48 @@ if (isset($_POST['submit'])){
 
             $image = addslashes(file_get_contents($file));
             $image_size = getimagesize($file);
+              
             // check to make sure it's an image, not a file of other types like text document
             if (!$image_size)
             	array_push($errors, "Please upload a valid image of your item");
 
-            if (empty($errors)) {
+  /*
+       $width = $image_size[0];
+       $height = $image_size[1];
+       $new_size = ($width + $height)/($width*($height/50));
+       $new_width = $width * $new_size;
+       $new_height = $height * $new_size;
+       $new_img = imagecreatetruecolor($new_width, $new_height);
+       $old_img = imagecreatefromjpeg($file);
+       imagecopyresized($new_img, $old_img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+*/
+       
+		switch($nutrition){
+			case "<200":
+			   $calories = 1;
+			   break;
+			case "200 - 399":
+			   $calories = 2;
+			   break;
+			case "400 - 599":
+			   $calories = 3;
+			   break;
+			case "600 - 799":
+			   $calories = 4;
+			   break;
+			case "800 - 999":
+			   $calories = 5;
+			   break;
+			case ">1000":
+			   $calories = 6;
+			   break;         
+			default:
+			    $calories = 10;   
+		}
 
+            if (empty($errors)) {
 	            $query = "INSERT INTO Product (Username, item_name, Type, Ready_time, Nutrition, image, Price, Taste) 
-	 			VALUES ('$username', '$itemname', '$type', '$time', '$nutrition', '$image', '$price', '$taste')";
+	 			VALUES ('$username', '$itemname', '$type', '$time', '$calories', '$image', '$price', '$taste')";
 
 		        $result = mysqli_query($connection,$query);
 		        if(!$result){
@@ -104,7 +149,6 @@ if (isset($_POST['submit'])){
 	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 	<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 	
-		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
 			
@@ -152,7 +196,7 @@ if (isset($_POST['submit'])){
                     var user = "<?php echo $_SESSION['name']; ?>";
                     $.post('getitems.php', {name: user}, function(data){
                         items.html(data);
-                        display_form.show(200);
+                        display_form.show(100);
                     });
                     
 				});
@@ -198,8 +242,8 @@ if (isset($_POST['submit'])){
 				</div>
 				<!-- start search-->
 				    <div class="search-box">
-					    <div id="sb-search" class="sb-search">
-							<form>
+						<div id="sb-search" class="sb-search">
+							<form action="user.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>
@@ -333,7 +377,17 @@ if (isset($_POST['submit'])){
 						 </ul>
 						 <ul>
 							 <li class="text-info">Nutrition info: </li>
-							 <li><input type="text" id="email "name="nutri-info" placeholder="notes on nutrition, allergens, etc."></li>
+							<!-- <li><input type="text" id="email "name="nutri-info" placeholder="approximate calories per serving"></li> -->
+							 <select class="sel-dropdown" name="nutri-info">
+							  <option value="empty"></option> 	
+							  <option value="<200">&lt;200 cal</option>
+							  <option value="200 - 399">200 - 399 cal</option>
+							  <option value="400 - 599">400 - 599 cal</option>
+							  <option value="600 - 799">600 - 799 cal</option>
+							  <option value="800 - 999">800 - 999 cal</option>
+							  <option value=">1000">&gt; 1000 cal</option>
+							</select>
+						
 						 </ul>
 						  <ul>
 							 <li class="text-info">Price: </li>

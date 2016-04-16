@@ -7,6 +7,7 @@ if (isset($_POST['search'])){
      header('Location: results.php');
 }
 
+require "password.php";
 
 if (isset($_POST['submit'])){
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
@@ -40,7 +41,9 @@ if (isset($_POST['submit'])){
 				$dbusername = $row['Username'];
 				$dbpin = $row['password'];
 			}
-			if ($dbpin != $inputpin)
+
+			//if ($dbpin != $inputpin)
+			if (password_verify($inputpin, $dbpin) == false)	
 			   $errors['combination'] = "Please double check your username/password";
 			else {
 				$_SESSION['name'] = $username;
@@ -51,7 +54,9 @@ if (isset($_POST['submit'])){
                 
                 //$updateTime = "UPDATE User SET LastLogIn= now() where Username='$username' ";
 		        $res = mysqli_query($connection,$updateTime);
+
 		        header('Location: user.php');
+		       /* ?><script>window.location = "user.php";</script><?php */
 				/*?> 
 				<script type="text/javascript"> 
 				var name = "<?php echo $dbusername ?>";

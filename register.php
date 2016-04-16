@@ -1,6 +1,9 @@
 <?php
 	// require('dbconnect.php');
 session_start();
+
+require "password.php";
+
 if (isset($_POST['search'])){
      $_SESSION['queryString'] = $_POST['search'];
      //echo $_SESSION['queryString'];
@@ -61,9 +64,9 @@ if (isset($_POST['submit'])){
             	$errors['password'] = "Passwords do not match";
 
             if (empty($errors)) {
-            	//$password = password_hash($temp, PASSWORD_DEFAULT);
+            	$password = password_hash($temp, PASSWORD_DEFAULT);
 	            $query = "INSERT INTO User (Username, PASSWORD, phone_num,address, email) 
-	 			VALUES ('$username', '$temp', '$phonenumber', '$address', '$email')";
+	 			VALUES ('$username', '$password', '$phonenumber', '$address', '$email')";
 	//  			$query="INSERT INTO User( Username, 
 	// PASSWORD , phone_num, address, email ) 
 	// VALUES (

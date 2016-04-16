@@ -204,7 +204,7 @@ if (isset($_POST['submit'])){
 
            function delete_item(item){
            	   //alert(item);
-           	   alert('Delete called!');
+           	 // alert('Delete called!');
            	   
            	   var target = item;
                $.ajax({
@@ -212,7 +212,7 @@ if (isset($_POST['submit'])){
                    data: {item_name: target},
                    type: 'POST',
                    success: function(){
-                   	   alert('success');
+                   	   alert('The item has been successfully deleted. Refresh the page and you will no longer see it.');
                    }
  
                });
@@ -350,25 +350,25 @@ if (isset($_POST['submit'])){
 							 <li class="text-info">Category: </li>
 							 <select class="sel-dropdown" name="category">
 							  <option value="empty" ></option> 	
-							  <option value="dessert" >Desserts</option>
-							  <option value="snack">Snacks/Appetizers</option>
-							  <option value="entree">Entrees</option>
-							  <option value="salad">Salads</option>
-							  <option value="burger">Burgers/Sandwiches</option>
-							  <option value="drink">Drinks</option>
-							  <option value="other">Other</option>
+							  <option value="Dessert" >Desserts</option>
+							  <option value="Snacks/Appetizers">Snacks/Appetizers</option>
+							  <option value="Entrees">Entrees</option>
+							  <option value="Salads">Salads</option>
+							  <option value="Burgers/Sandwiches">Burgers/Sandwiches</option>
+							  <option value="Drinks">Drinks</option>
+							  <option value="Other">Other</option>
 							</select>
 						</ul>
 						<ul>
 							 <li class="text-info">Taste: </li>
 							 <select class="sel-dropdown" name="taste">
 							  <option value="empty" ></option> 	
-							  <option value="sweet">Sweet</option>
-							  <option value="sweet-sour">Sweet/Sour</option>
-							  <option value="salty">Salty</option>
-							  <option value="spicy">Spicy</option>
-							  <option value="bitter">Bitter</option>
-							  <option value="other">Other</option>
+							  <option value="Sweet">Sweet</option>
+							  <option value="Sweet/Sour">Sweet/Sour</option>
+							  <option value="Salty">Salty</option>
+							  <option value="Spicy">Spicy</option>
+							  <option value="Bitter">Bitter</option>
+							  <option value="Other">Other</option>
 							</select>
 						</ul>
 						<ul>

@@ -4,6 +4,17 @@
    	if (!$_SESSION['queryString'])
    		header('Location: user.php');
 */
+
+   	if (empty($_SESSION['queryString']) && empty($_POST['search'])){
+   		?>
+   			<script>  
+   			    alert("This page cannot be refreshed. Please start a new search.");
+   				history.go(-1); 
+   			</script>
+   		<?php
+   	}
+
+   	   	
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
 	$dbpassword="l!Jkaqc2)Z%J";
@@ -24,20 +35,62 @@
             	$query = $_SESSION['queryString'];
             else
             	$query = $_POST['search'];
-           // echo $username;
 
 			$result = mysqli_query($connection, "SELECT * FROM Product where item_name like '%$query%' ");
 
 			while($row = mysqli_fetch_assoc($result)){
 				$newItem = array();
-				$newItem['item_name'] = "<div class=\"user-info\"><b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
+				$newItem['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" /><br />';
+				$newItem['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
 				$newItem['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
 				$newItem['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
 				$newItem['Ready_time'] = "<b>Prep time: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Ready_time'];
 				$newItem['Nutrition']= "<b>Nutrition Info: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Nutrition'];
 			    $newItem['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
 			    $newItem['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
+			    $newItem['Seller'] = "<b>Sold by: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
+                
+                /*
+                if(isOnline($row['Username'], $connection) == true)
+                	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
+                	$newItem['chat'] = "TRUE";
+                else
+                	$newItem['chat'] = "False";
+                	*/
+                $user = $row['Username'];	
+                $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
+				$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
+
+                
+				 while ($row = mysqli_fetch_assoc($temp1)) {
+       				 $lastLogin = $row['LastLogIn'];
+       				 break;
+   				 } 
+
+   				 while ($row2 = mysqli_fetch_assoc($temp2)) {
+       				 $lastLogOut = $row2['LastLogOut'];
+       				 break;
+   				 } 
+
+   				 /*
+   				 $lastLogin = mysqli_fetch_row($temp1);
+   				 $lastLogin = (int)$lastLogin['LastLogIn'];
+
+   				 $lastLogOut = mysqli_fetch_row($temp2);
+   				 $lastLogout = (int)$lastLogout['LastLogOut'];
+   				 */
+
+				//echo $lastLogin . "<br />";
+				//echo $lastLogOut;
+
+				if ($lastLogin > $lastLogOut )
+					$newItem['chat'] =  "<button onclick=\"chat()\">Chat</button>";
+				else
+					$newItem['chat'] = "";
+			    $newItem['order-item'] = $row['item_name'];
+			    $newItem['order-seller'] = $row['Username'];
 			    array_push($items, $newItem);
+		
 			}
 
              /*
@@ -54,12 +107,26 @@
 				 $_SESSION["h3"] = "We've found the following items for you: ";
 			else
 			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
+
+	function isOnline($user, $connection){
+		$lastLogin = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
+		$lastLogout = mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");
+	/*	$_SESSION['login'] = $lastLogin;
+		$_SESSION['logout'] = $lastLogout;
+*/
+		if ($lastLogin > $lastLogout) 
+			return true;
+		else
+			return false;
+	}		 	
   	        
 
 	function display_item($userinfo=array()){
    $output = "";
    if (!empty($userinfo)){ 
    	for ($i = 0; $i < sizeof($userinfo); $i++){
+   	   $curItem = array();
+   	 $output .= $userinfo[$i]['img'];
      $output .=$userinfo[$i]['item_name'] . "<br />";
 	$output .=$userinfo[$i]['Type'] . "<br />" ;
      $output .=$userinfo[$i]['Taste'] . "<br />"; 
@@ -67,8 +134,18 @@
      $output .=$userinfo[$i]['Nutrition'] . "<br />";
      $output .=$userinfo[$i]['Price'] . "<br />";
      $output .=$userinfo[$i]['Date'] . "<br />";
+     $output .=$userinfo[$i]['Seller'];
+     $output .= "&nbsp;&nbsp;". $userinfo[$i]['chat']  ."<br />";
+
+     // http://stackoverflow.com/questions/6502107/how-to-pass-php-array-parameter-to-javascript-function
+     array_push($curItem, $userinfo[$i]['order-item'], $userinfo[$i]['order-seller'], $_SESSION['name']);
+     $Order = implode(",", $curItem);
+
+     $output .= '<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
+     $output .= "<hr />";
      $output .= "</div>";
      $output .= "<br /><br />";
+
     }
    }  
    return $output;
@@ -110,6 +187,10 @@
 				});
 
                 var User = "<?php echo $_SESSION['name']; ?>";
+              /*  var login = "<?php echo $_SESSION['login']; ?>"
+                var logout = "<?php echo $_SESSION['logout']; ?>"
+                alert(login);
+                alert(logout); */
 				if (!User){
 					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
 					    content1 += " | ";
@@ -125,19 +206,38 @@
 						content2 += "</form></li></ul>";
 					$(".login-section").html(content2);
 				}
-				/*
-				var msg = "<?php echo $_SESSION['h3'];?>";
-				if (!msg)
-				   document.getElementById('message').innerHTML = "Sorry, no matching results were found.";
-				else
-					document.getElementById('message').innerHTML = "We've found the following items for you: ";
-				*/
+				
 			});
           /*
 	         window.onbeforeunload = function(){
 	         	return "Refreshing the page will erase the results from your last query. Please start a new search.";
 	         }
 	         */
+	         function chat(){
+	         	alert("chat called");
+	         }
+
+	          function order_item(info){
+           	   //alert(item);
+           	 // alert('Delete called!');
+           	  var order_info = info.split(',');
+           	  var item = order_info[0];
+           	  var seller = order_info[1];
+           	  var buyer = order_info[2];
+
+           	   /*
+           	   var target = item;
+               $.ajax({
+                   url: 'delete-item.php',
+                   data: {item_name: target},
+                   type: 'POST',
+                   success: function(){
+                   	   alert('The item has been successfully deleted. Refresh the page and you will no longer see it.');
+                   }
+ 
+               });
+			  */
+           }
 		</script>
 </head>
 <body>

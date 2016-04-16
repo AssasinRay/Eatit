@@ -16,9 +16,9 @@
 	    die("Database Selection Failed" . mysql_error());
 	}
 
-    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog ORDER by Id DESC limit 1");
+    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog"); // ORDER by Id DESC limit 1
     while($extract = mysqli_fetch_array($result1)){
-    	echo $extract['Username'] . ":   " . $extract['Log'];
+    	echo $extract['Username'] . ":   " . $extract['Log'] . "<br />";
     }
 
 

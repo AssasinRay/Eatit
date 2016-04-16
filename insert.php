@@ -20,11 +20,12 @@
 
     $queryStr = "INSERT INTO Chatlog (Username, Log) values ('$uname','$msg')";
     $query = mysqli_query($connection, $queryStr);
-
-    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog ORDER by Id DESC limit 1");
+    /*
+    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog"); // ORDER by Id DESC limit 1
     while($extract = mysqli_fetch_array($result1)){
     	echo $extract['Username'] . ":   " . $extract['Log'];
     }
-
+    */
+    echo $uname .  ":   " . $msg;
 
 ?>

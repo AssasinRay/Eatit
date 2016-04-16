@@ -61,19 +61,23 @@
 				}
 
 					$.ajaxSetup({cache: false});
-					    var lastMsg = "";
+					  //  var lastMsg = "";
 						setInterval(function(){
 						/*	var temp = "<div></div>";
 							temp.load('logs.php');
 							$displayArea.append(temp);
 							*/
+							/*
 							$.get("logs.php", {}, function(resp) {
+								lastMsg = resp;
+
 								if (resp !== lastMsg || lastMsg.length===0)
 							     $displayArea.append(resp);
 							    else
 							      lastMsg = resp;
 							});
-						}, 2000);
+*/							getMessages();
+						}, 1000);
 
  	            // handle the chat
 				$inputArea = $('#inputMessage');
@@ -130,7 +134,17 @@
 				document.getElementById('inputMessage').value = "";
 			}
 
-            
+            function getMessages(){
+            	$.get("logs.php", function(resp) {
+					$displayArea.html(resp);	 
+					scrollDown();
+				 });
+            }
+
+            function scrollDown() {
+			    var display = document.getElementById('display');
+		     	display.scrollTop = display.scrollHeight ;
+            }
 		</script>
 	<!-- start-smoth-scrolling -->
 

@@ -23,7 +23,6 @@ if (isset($_POST['submit'])){
 	$select_db = mysqli_select_db($connection,$database_name);
 
 	if (!$select_db){
-		// <script> alert('databaseselection fail')</script>
 	    die("Database Selection Failed" . mysql_error());
 	}
 

@@ -44,7 +44,15 @@ if (isset($_POST['submit'])){
 			   $errors['combination'] = "Please double check your username/password";
 			else {
 				$_SESSION['name'] = $username;
-				?> 
+				// update the last login timestamp:
+               
+                $curTime = time();
+                $updateTime = "UPDATE User SET LastLogIn='$curTime' where Username='$username' ";
+                
+                //$updateTime = "UPDATE User SET LastLogIn= now() where Username='$username' ";
+		        $res = mysqli_query($connection,$updateTime);
+		        header('Location: user.php');
+				/*?> 
 				<script type="text/javascript"> 
 				var name = "<?php echo $dbusername ?>";
 				sessionStorage.User = name;
@@ -52,6 +60,7 @@ if (isset($_POST['submit'])){
 				window.location = "user.php";
 				</script>
 				<?php
+				*/
 			//	$_SESSION['name'] = $username;
 			//	header('Location: user.php');
 			}

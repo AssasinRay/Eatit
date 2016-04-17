@@ -42,7 +42,7 @@
 
 			while($row = mysqli_fetch_assoc($result)){
 				$newItem = array();
-				$newItem['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" /><br />';
+				$newItem['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" width="400px" height="300px" /><br />';
 				$newItem['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
 				$newItem['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
 				$newItem['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
@@ -114,7 +114,7 @@
 			$recommended_result = mysqli_query($connection, "SELECT * FROM Product ");
 			while($row = mysqli_fetch_assoc($recommended_result)){
 				$recommended_item = array();
-				$recommended_item['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" /><br />';
+				$recommended_item['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img"  width="400px" height="300px" /><br />';
 				$recommended_item['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
 				$recommended_item['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
 				$recommended_item['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
@@ -164,7 +164,7 @@
 					$recommended_item['chat'] = "";
 			    $recommended_item['order-item'] = $row['item_name'];
 			    $recommended_item['order-seller'] = $row['Username'];
-			    array_push($items_recommend, $newItem);
+			    array_push($items_recommend, $recommended_item);
 		
 			}
 
@@ -422,9 +422,9 @@
 		    /* $_POST['search'] = "";
 		     $_SESSION["h3"] = ""; */
 		   ?>
-		   <?php echo display_item($recommended_item); 
+		 <?php echo display_item($items_recommend); 
 		    $_SESSION['queryString'] = "";
-		   ?>
+		   ?> 
 
 			<div class="clearfix"></div>
 		</div>

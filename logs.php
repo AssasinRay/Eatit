@@ -1,4 +1,6 @@
 <?php 
+   $one = $_GET['participant1'];
+   $two = $_GET['participant2'];
 
    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -16,10 +18,15 @@
 	    die("Database Selection Failed" . mysql_error());
 	}
 
-    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog"); // ORDER by Id DESC limit 1
-    while($extract = mysqli_fetch_array($result1)){
-    	echo $extract['Username'] . ":   " . $extract['Log'] . "<br />";
-    }
+    $query = "SELECT * FROM Chatlog where sender ='$one' and receiver = '$two'  union select * FROM Chatlog where sender ='$two' and receiver = '$one' order by Id asc"; 
+  //  $query = "SELECT * from Chatlog where Username= 'one' "; 
+    $result1 = mysqli_query($connection, $query); 
 
+    $get_rows= mysqli_affected_rows($connection);
+    if ($get_rows > 0){
+           while($extract = mysqli_fetch_array($result1)){ // before it was fetch_array
+              echo $extract['sender'] . ":   " . $extract['Log'] . "<br />";
+     }
+    }
 
 ?>

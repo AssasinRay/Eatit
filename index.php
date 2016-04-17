@@ -271,6 +271,58 @@ if (isset($_POST['search'])){
 </div>
 <!-- //banner -->
 <!-- welcome -->
+<!--
+<div class="welcome">
+	<div class="container">
+		<div class="wel-info" style="text-align:center">
+			<h3>WELCOME</h3>
+			<div class="strip-line"></div>
+			<h4 style="margin-top:2%">Discover and order delicious home-made food from different cultures! </h4>
+		</div>
+		<div class="welcome-grids">
+			<div class="col-md-4 welcome-grid-img">
+				<img src="images/scallion_pancake.jpg" alt=""/>
+				<div class="wel-pos">
+					<h4>Scallion Pancake</h4>
+				</div>
+			</div>
+			<div class="col-md-4 welcome-grid">
+				<div class="welcome-gd second">
+					<h4>Title</h4>
+					<p> Some words here.
+					</p>
+				</div>
+			</div>
+			<div class="col-md-4 welcome-grid-img">
+				<img src="images/pic11.jpg" alt=""/>
+				<div class="wel-pos">
+					<h4>CARROT EGG</h4>
+				</div>
+			</div>
+			<div class="col-md-4 welcome-grid">
+				<div class="welcome-gd second">
+					<h4>Scallion Pancake </h4>
+					<p> Some words
+					</p>
+			</div>
+			<div class="col-md-4 welcome-grid-img">
+				<img src="images/pic2.jpg" alt=""/>
+				<div class="wel-pos">
+					<h4>SPECIAL PRAWNS</h4>
+				</div>
+			</div>
+			<div class="col-md-4 welcome-grid">
+				<div class="welcome-gd second">
+					<h4>Title </h4>
+					<p> Some words here.
+					</p>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+-->
 <div class="welcome">
 	<div class="container">
 		<div class="wel-info">
@@ -349,6 +401,7 @@ if (isset($_POST['search'])){
 </div>
 <!-- //good -->
 <!-- delicious -->
+<!--
 <div class="delicious">
 	<div class="container">
 		<div class="delicious-info">
@@ -384,6 +437,7 @@ if (isset($_POST['search'])){
 		</div>
 	</div>
 </div>
+-->
 <!-- //delicious -->
 <!-- footer-top -->
 <!--

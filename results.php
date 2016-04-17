@@ -82,9 +82,10 @@
 
 				//echo $lastLogin . "<br />";
 				//echo $lastLogOut;
+   				 //'<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
 
 				if ($lastLogin > $lastLogOut )
-					$newItem['chat'] =  "<button onclick=\"chat()\">Chat</button>";
+					$newItem['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
 				else
 					$newItem['chat'] = "";
 			    $newItem['order-item'] = $row['item_name'];
@@ -213,8 +214,23 @@
 	         	return "Refreshing the page will erase the results from your last query. Please start a new search.";
 	         }
 	         */
-	         function chat(){
-	         	alert("chat called");
+	         function chat(seller){
+	         	var curUser = "<?php echo $_SESSION['name'] ;?>";
+	         	var url = 'eatiteatit.web.engr.illinois.edu/chat.php?user1=' + curUser + "&user2=" + seller; // initiator first, responder second
+
+	         	if (seller && curUser){
+	         		$.ajax({
+						url: "chat-requests.php",
+						type: "get", 
+						data:{initiator: curUser, responder: seller, URL: url},
+						  success: function(response) {
+							window.location = url;
+						},
+						  error: function(xhr) {
+						    console.log("Failed to send chat request.");
+						  }
+						});
+		         	}
 	         }
 
 	          function order_item(info){

@@ -19,10 +19,16 @@
     
     $username = $_SESSION['name'];
 
-    $query = "DELETE from User where Username='$username'";
+    $query1 = "DELETE from User where Username='$username'";
     
-    $result = mysqli_query($connection,$query);
-	if($result){
+    $result1 = mysqli_query($connection,$query);
+
+    $query2 = "DELETE from Product where Username='$username'";
+    
+    $result2 = mysqli_query($connection,$query);
+
+
+	if($result1 && $result2){
         session_unset();
         header('Location: index.php');
       }

@@ -173,14 +173,17 @@ if (isset($_POST['submit'])){
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
 
+
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
                 var display_form = $('#display-form');
                 var outer = $('.registration-form');
                 var items = $('#all-items');
 
-
-				//$("#Name").text(sessionStorage.User);
+                var display_chat = $('#display-chats');
+                var chats = $('#all-chats');
+                var user = "<?php echo $_SESSION['name']; ?>";
+				//$("#Name").text(out.User);
 
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
@@ -193,19 +196,32 @@ if (isset($_POST['submit'])){
 
 				$('#show-item-button').click(function(){
                     add_form.hide();
-                    var user = "<?php echo $_SESSION['name']; ?>";
+               
                     $.post('getitems.php', {name: user}, function(data){
                         items.html(data);
                         display_form.show(100);
                     });
-                    
+				});
+
+				$('#chat-button').click(function(){
+					add_form.hide();
+					display_form.hide();
+					$.ajax({
+						url: "get-requests.php",
+						type: "get", 
+						data:{User: user},
+						  success: function(response) {
+							chats.html(response);
+							display_chat.show(100);
+						},
+						  error: function(xhr) {
+						    console.log("Failed to retrieve chat request.");
+						  }
+						});
 				});
 			});
 
            function delete_item(item){
-           	   //alert(item);
-           	 // alert('Delete called!');
-           	   
            	   var target = item;
                $.ajax({
                    url: 'delete-item.php',
@@ -214,13 +230,25 @@ if (isset($_POST['submit'])){
                    success: function(){
                    	   alert('The item has been successfully deleted. Refresh the page and you will no longer see it.');
                    }
- 
                });
-
            }
-		</script>
-	<!-- start-smoth-scrolling -->
 
+           function accept_chat(url){
+           	    // first delete the request (mark the request as accepted)
+           	    var user = "<?php echo $_SESSION['name']; ?>";
+            	$.ajax({
+                   url: 'delete-chat.php',
+                   data: {User: user},
+                   type: 'get',
+                   success: function(){
+                   	     	// upon success, redirect user to chat interface
+           	 				window.location = url;
+                   }
+               });
+          
+           }
+
+		</script>
 </head>
 <body>
 <!-- header -->
@@ -334,6 +362,7 @@ if (isset($_POST['submit'])){
      		<a class="hvr-shutter-in-horizontal button" id="add-item-button">ADD NEW ITEM</a>
      		<a class="hvr-shutter-in-horizontal button" id="show-item-button" name="show-item" style="margin-left:1%">MY ITEMS</a>
      		<a class="hvr-shutter-in-horizontal button" id="order-button" style="margin-left:1%">MY ORDERS</a>
+     		<a class="hvr-shutter-in-horizontal button" id="chat-button" style="margin-left:1%">MY CHATS</a>
   		</div>
 		
 		<div id="item-form">
@@ -422,6 +451,15 @@ if (isset($_POST['submit'])){
         <div id="display-form">
 			<div class="reg-form">
 				<div class="reg" id="all-items">
+
+        	    </div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+		 <div id="display-chats">
+			<div class="reg-form">
+				<div class="reg" id="all-chats">
 
         	    </div>
 			</div>

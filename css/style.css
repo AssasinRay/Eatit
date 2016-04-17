@@ -4330,7 +4330,7 @@ li.data.order-special {
   border: 2px solid black;
 }
 
-#add-item-button, #show-item-button, #order-button {
+#add-item-button, #show-item-button, #order-button, #chat-button {
   cursor: pointer;
 }
 

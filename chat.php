@@ -1,6 +1,33 @@
 <?php 
    session_start();
 
+if (isset($_POST['search'])){
+     $_SESSION['queryString'] = $_POST['search'];
+     //echo $_SESSION['queryString'];
+     header('Location: results.php');
+     exit();
+}
+
+   $buyer = $_GET['user1'];
+   $seller = $_GET['user2'];
+   $curUser = $_SESSION['name'];
+   /*
+   echo "buyer: " . $buyer;
+   echo "seller: " . $seller;
+   echo "User: " . $curUser;
+   */
+   
+   if ($curUser != $buyer && $curUser != $seller){
+   	  ?> 
+   	     <script>history.go(-1);</script>
+   	   <?php
+   }
+
+   if ($curUser == $buyer)
+   	 $id = $seller;
+   	else
+   	 $id = $buyer;
+  
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +70,8 @@
 				});
 */              
                 var User = "<?php echo $_SESSION['name']; ?>";
+
+                var other = "<?php echo $id; ?>";
 				if (!User){
 					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
 					    content1 += " | ";
@@ -63,21 +92,8 @@
 					$.ajaxSetup({cache: false});
 					  //  var lastMsg = "";
 						setInterval(function(){
-						/*	var temp = "<div></div>";
-							temp.load('logs.php');
-							$displayArea.append(temp);
-							*/
-							/*
-							$.get("logs.php", {}, function(resp) {
-								lastMsg = resp;
-
-								if (resp !== lastMsg || lastMsg.length===0)
-							     $displayArea.append(resp);
-							    else
-							      lastMsg = resp;
-							});
-*/							getMessages();
-						}, 1000);
+							getMessages(User, other);
+						}, 3000);
 
  	            // handle the chat
 				$inputArea = $('#inputMessage');
@@ -111,7 +127,7 @@
 						$.ajax({
 							  url: "insert.php",
 							  type: "get", 
-							  data:{uname:User, msg: msg},
+							  data:{uname:User, receiver: other, msg: msg},
 							  success: function(response) {
 							    var content = "<p>" + response + "</p>";
 	            				$displayArea.append(content);
@@ -134,11 +150,21 @@
 				document.getElementById('inputMessage').value = "";
 			}
 
-            function getMessages(){
-            	$.get("logs.php", function(resp) {
-					$displayArea.html(resp);	 
-					scrollDown();
-				 });
+            function getMessages(self,other){
+
+				$.ajax({
+					  url: "logs.php",
+					  type: "get", 
+					  data:{participant1: self, participant2: other},
+					  success: function(response) {
+					  	//console.log("Return text:  " + response);
+					    $displayArea.html(response);	 
+						scrollDown();
+					  },
+					  error: function(xhr) {
+					    console.log("something weird happened");
+					  }
+					});
             }
 
             function scrollDown() {
@@ -163,7 +189,7 @@
 				<!-- start search-->
 				    <div class="search-box">
 					    <div id="sb-search" class="sb-search">
-							<form>
+							<form action="chat.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>

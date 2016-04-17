@@ -1,7 +1,7 @@
 <?php 
-   $uname = $_GET['uname'];
-   $receiver = $_GET['receiver'];
-   $msg = $_GET['msg'];
+   $initiator = $_GET['initiator'];
+   $responder = $_GET['responder'];
+   $url = $_GET['URL'];
 
    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -19,14 +19,11 @@
 	    die("Database Selection Failed" . mysql_error());
 	}
 
-    $queryStr = "INSERT INTO Chatlog (sender, receiver, Log) values ('$uname', '$receiver','$msg')";
+    // 0 for request hasn't been answered, 1 for the contrary
+    $queryStr = "INSERT INTO ChatRequests (initiator, responder, requestStatus, url) values ('$initiator','$responder', 0, '$url')";
     $query = mysqli_query($connection, $queryStr);
-    /*
-    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog"); // ORDER by Id DESC limit 1
-    while($extract = mysqli_fetch_array($result1)){
-    	echo $extract['Username'] . ":   " . $extract['Log'];
-    }
-    */
-    echo $uname .  ":   " . $msg;
+    if (!$query)
+       echo "ERROR: " . mysqli_error($connection)
 
+   // echo "requested";
 ?>

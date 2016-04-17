@@ -22,6 +22,8 @@
 	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
 	$items = array();
 	$users = array();
+	//recommended items
+	$items_recommend = array();
 
 	if (!$connection){
 	    die("Database Connection Failed");
@@ -108,6 +110,64 @@
 				 $_SESSION["h3"] = "We've found the following items for you: ";
 			else
 			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
+
+			$recommended_result = mysqli_query($connection, "SELECT * FROM Product ");
+			while($row = mysqli_fetch_assoc($recommended_result)){
+				$recommended_item = array();
+				$recommended_item['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" /><br />';
+				$recommended_item['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
+				$recommended_item['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
+				$recommended_item['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
+				$recommended_item['Ready_time'] = "<b>Prep time: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Ready_time'];
+				$recommended_item['Nutrition']= "<b>Nutrition Info: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Nutrition'];
+			    $recommended_item['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
+			    $recommended_item['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
+			    $recommended_item['Seller'] = "<b>Sold by: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
+                
+                /*
+                if(isOnline($row['Username'], $connection) == true)
+                	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
+                	$newItem['chat'] = "TRUE";
+                else
+                	$newItem['chat'] = "False";
+                	*/
+                $user = $row['Username'];	
+                $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
+				$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
+
+                
+				 while ($row = mysqli_fetch_assoc($temp1)) {
+       				 $lastLogin = $row['LastLogIn'];
+       				 break;
+   				 } 
+
+   				 while ($row2 = mysqli_fetch_assoc($temp2)) {
+       				 $lastLogOut = $row2['LastLogOut'];
+       				 break;
+   				 } 
+
+   				 /*
+   				 $lastLogin = mysqli_fetch_row($temp1);
+   				 $lastLogin = (int)$lastLogin['LastLogIn'];
+
+   				 $lastLogOut = mysqli_fetch_row($temp2);
+   				 $lastLogout = (int)$lastLogout['LastLogOut'];
+   				 */
+
+				//echo $lastLogin . "<br />";
+				//echo $lastLogOut;
+   				 //'<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
+
+				if ($lastLogin > $lastLogOut )
+					$recommended_item['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
+				else
+					$recommended_item['chat'] = "";
+			    $recommended_item['order-item'] = $row['item_name'];
+			    $recommended_item['order-seller'] = $row['Username'];
+			    array_push($items_recommend, $newItem);
+		
+			}
+
 
 	function isOnline($user, $connection){
 		$lastLogin = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
@@ -361,6 +421,9 @@
 		    $_SESSION['queryString'] = "";
 		    /* $_POST['search'] = "";
 		     $_SESSION["h3"] = ""; */
+		   ?>
+		   <?php echo display_item($recommended_item); 
+		    $_SESSION['queryString'] = "";
 		   ?>
 
 			<div class="clearfix"></div>

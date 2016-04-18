@@ -463,7 +463,7 @@
 	         */
 	         function chat(seller){
 	         	var curUser = "<?php echo $_SESSION['name'] ;?>";
-	         	var url = 'eatiteatit.web.engr.illinois.edu/chat.php?user1=' + curUser + "&user2=" + seller; // initiator first, responder second
+	         	var url = 'chat.php?user1=' + curUser + "&user2=" + seller; // initiator first, responder second
 
 	         	if (seller && curUser){
 	         		$.ajax({

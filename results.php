@@ -23,6 +23,7 @@
 	$items = array();
 	$users = array();
 	//recommended items
+	$items_search_result=array();
 	$items_recommend = array();
 
 	if (!$connection){
@@ -42,6 +43,7 @@
 
 			while($row = mysqli_fetch_assoc($result)){
 				$newItem = array();
+				$search_item=array();
 				$newItem['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img" width="400px" height="300px" /><br />';
 				$newItem['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
 				$newItem['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
@@ -51,7 +53,11 @@
 			    $newItem['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
 			    $newItem['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
 			    $newItem['Seller'] = "<b>Sold by: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
-                
+			    $search_item['Type']=$row['Type'];
+			    $search_item['Taste']=$row['Taste'];
+			    $search_item['Nutrition']=$row['Nutrition'];
+			    $search_item['Price']=$row['Price'];
+
                 /*
                 if(isOnline($row['Username'], $connection) == true)
                 	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
@@ -93,6 +99,7 @@
 			    $newItem['order-item'] = $row['item_name'];
 			    $newItem['order-seller'] = $row['Username'];
 			    array_push($items, $newItem);
+			    array_push($items_search_result,$search_item);
 		
 			}
 
@@ -106,68 +113,218 @@
 			}
 		    */
 
+			 $items_recommend=recommend_system($connection,$items_search_result);
 			if (!empty($items))
 				 $_SESSION["h3"] = "We've found the following items for you: ";
 			else
 			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
 
-			$recommended_result = mysqli_query($connection, "SELECT * FROM Product ");
-			while($row = mysqli_fetch_assoc($recommended_result)){
-				$recommended_item = array();
-				$recommended_item['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img"  width="400px" height="300px" /><br />';
-				$recommended_item['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
-				$recommended_item['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
-				$recommended_item['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
-				$recommended_item['Ready_time'] = "<b>Prep time: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Ready_time'];
-				$recommended_item['Nutrition']= "<b>Nutrition Info: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Nutrition'];
-			    $recommended_item['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
-			    $recommended_item['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
-			    $recommended_item['Seller'] = "<b>Sold by: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
-                
-                /*
-                if(isOnline($row['Username'], $connection) == true)
-                	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
-                	$newItem['chat'] = "TRUE";
-                else
-                	$newItem['chat'] = "False";
-                	*/
-                $user = $row['Username'];	
-                $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
-				$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
 
-                
-				 while ($row = mysqli_fetch_assoc($temp1)) {
-       				 $lastLogin = $row['LastLogIn'];
-       				 break;
-   				 } 
+	function recommend_system($connection,$items_search_result){
 
-   				 while ($row2 = mysqli_fetch_assoc($temp2)) {
-       				 $lastLogOut = $row2['LastLogOut'];
-       				 break;
-   				 } 
-
-   				 /*
-   				 $lastLogin = mysqli_fetch_row($temp1);
-   				 $lastLogin = (int)$lastLogin['LastLogIn'];
-
-   				 $lastLogOut = mysqli_fetch_row($temp2);
-   				 $lastLogout = (int)$lastLogout['LastLogOut'];
-   				 */
-
-				//echo $lastLogin . "<br />";
-				//echo $lastLogOut;
-   				 //'<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
-
-				if ($lastLogin > $lastLogOut )
-					$recommended_item['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
-				else
-					$recommended_item['chat'] = "";
-			    $recommended_item['order-item'] = $row['item_name'];
-			    $recommended_item['order-seller'] = $row['Username'];
-			    array_push($items_recommend, $recommended_item);
-		
+		$recommended_result = mysqli_query($connection, "SELECT * FROM Product ");
+		$avg_item=array();
+		$items_recommend = array();
+		//if cannot find similar items, simply generate a random vector
+		if (empty($items_search_result)){
+			for ($i = 0; $i < 23; $i++){
+				array_push($avg_item,0);
 			}
+		}
+		else
+		 	 $avg_item=generate_average_item($items_search_result);
 
+		while($row = mysqli_fetch_assoc($recommended_result)){
+
+			$search_item=array();
+			$recommended_item = array();
+			$search_item['Type']=$row['Type'];
+		    $search_item['Taste']=$row['Taste'];
+		    $search_item['Nutrition']=$row['Nutrition'];
+		    $search_item['Price']=$row['Price'];
+		    $similarity_score=similarity_score($avg_item,$search_item);
+			$recommended_item['img'] = '<div class=\"user-info\"><img src="data:image/jpeg;base64,' . base64_encode($row['image']). '" class="item-img"  width="130px" height="60px" /><br />';
+			$recommended_item['item_name'] = "<b>Item: " ."&nbsp;&nbsp;&nbsp;</b>". $row['item_name'];
+			$recommended_item['Type'] = "<b>Type: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Type'];
+			$recommended_item['Taste'] = "<b>Taste: " ."&nbsp;&nbsp;&nbsp;</b>" . $row['Taste'];
+			$recommended_item['Nutrition']= "<b>Nutrition Info: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Nutrition'];
+		    $recommended_item['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
+			$recommended_item['sim_score']=$similarity_score;
+			$user = $row['Username'];	
+            $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
+			$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
+
+            
+			 while ($row = mysqli_fetch_assoc($temp1)) {
+   				 $lastLogin = $row['LastLogIn'];
+   				 break;
+				 } 
+
+				 while ($row2 = mysqli_fetch_assoc($temp2)) {
+   				 $lastLogOut = $row2['LastLogOut'];
+   				 break;
+				 } 
+
+			if ($lastLogin > $lastLogOut )
+				$recommended_item['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
+			else
+				$recommended_item['chat'] = "";
+		    $recommended_item['order-item'] = $row['item_name'];
+		    $recommended_item['order-seller'] = $row['Username'];
+		    array_push($items_recommend, $recommended_item);
+
+		}
+
+		$score = array();
+		for ($i=0;$i<sizeof($items_recommend);$i++){
+		    $score[$i] = $items_recommend[$i]['sim_score'];
+		}
+		array_multisort($score, SORT_DESC, $items_recommend);
+		return $items_recommend;
+
+
+	}
+	//find the average of search result
+	function generate_average_item($search_result=array()){
+		$avg_item=array();
+		$type_array=array();
+		$taste_array=array();
+		$nutrition_array=array();
+		$price_array=array();
+
+		if(!empty($search_result)){
+			for ($i = 0; $i < sizeof($search_result); $i++){
+				array_push($type_array,$search_result[$i]['Type']);
+				array_push($taste_array,$search_result[$i]['Taste']);
+				array_push($nutrition_array,$search_result[$i]['Nutrition']);
+				array_push($price_array,$search_result[$i]['Price']);
+
+			}
+		}
+		$c = array_count_values($type_array); 
+		$max_type = array_search(max($c), $c);
+		$d = array_count_values($taste_array); 
+		$max_taste = array_search(max($d), $d);
+		$avg_nutrition = array_sum($nutrition_array) / count($nutrition_array); 
+		$avg_price = array_sum($price_array) / count($price_array);
+		$avg_item['Type']=$max_type;
+	    $avg_item['Taste']=$max_taste;
+	    $avg_item['Nutrition']=$avg_nutrition;
+	    $avg_item['Price']=$avg_price; 
+		return $avg_item;
+
+	}
+
+
+	function dotp($arr1, $arr2){
+     return array_sum(array_map(create_function('$a, $b', 'return $a * $b;'), $arr1, $arr2));
+	}
+
+	function similarity_score($item1,$item2){
+		$vector1=array();
+		$vector2=array();
+		$vector1=array_merge(type_feature($item1),Taste_feature($item1),Nutrition_feature($item1),Price_feature($item1));
+		$vector2=array_merge(type_feature($item2),Taste_feature($item2),Nutrition_feature($item2),Price_feature($item2));
+		$similarity=dotp($vector1,$vector2)/sqrt(dotp($vector1,$vector1)*dotp($vector2,$vector2));
+		return $similarity;
+	}
+	function type_feature($item){
+		$ret=array();
+		if($item['Type']=="" || $item['Type']=="Other"){
+			array_push($ret,0,0,0,0,0,1);
+		}
+		elseif ($item['Type']=="Snacks/Appetizers"){
+			array_push($ret,1,0,0,0,0,0);
+		}
+		elseif ($item['Type']=="Entrees"){
+			array_push($ret,0,1,0,0,0,0);
+		}
+		elseif ($item['Type']=="Salads"){
+			array_push($ret,0,0,1,0,0,0);
+		}
+		elseif ($item['Type']=="Burgers/Sandwiches"){
+			array_push($ret,0,0,0,1,0,0);
+		}
+		elseif ($item['Type']=="Drinks"){
+			array_push($ret,0,0,0,0,1,0);
+		}
+		else{
+			array_push($ret,0,0,0,0,0,0);
+		}
+		return $ret;
+	}
+	function Taste_feature($item){
+		$ret=array();
+		if($item['Taste']=="" || $item['Taste']=="Other"){
+			array_push($ret,0,0,0,0,0,1);
+		}
+		elseif ($item['Taste']=="Sweet"){
+			array_push($ret,1,1,0,0,0,0);
+		}
+		elseif ($item['Taste']=="Sweet/Sour"){
+			array_push($ret,1,1,0,0,0,0);
+		}
+		elseif ($item['Taste']=="Salty"){
+			array_push($ret,0,0,1,0,0,0);
+		}
+		elseif ($item['Taste']=="Spicy"){
+			array_push($ret,0,0,0,1,0,0);
+		}
+		elseif ($item['Taste']=="Bitter"){
+			array_push($ret,0,0,0,0,1,0);
+		}
+		else{
+			array_push($ret,0,0,0,0,0,0);
+		}
+		return $ret;
+	}
+	function Nutrition_feature($item){
+		$ret=array();
+		$nutrition=$item['Nutrition'];
+		if($nutrition>=0 and $nutrition<200){
+			array_push($ret,1,1,0,0,0,0);
+		}
+		elseif ($nutrition>=200 and $nutrition<400){
+			array_push($ret,1,1,1,0,0,0);
+		}
+		elseif ($nutrition>=400 and $nutrition<600){
+			array_push($ret,0,1,1,1,0,0);
+		}
+		elseif ($nutrition>=600 and $nutrition<800){
+			array_push($ret,0,0,1,1,1,0);
+		}
+		elseif ($nutrition>=800 and $nutrition<1000){
+			array_push($ret,0,0,0,1,1,1);
+		}
+		elseif ($nutrition>=1000){
+			array_push($ret,0,0,0,0,1,1);
+		}
+		else{
+			array_push($ret,0,0,0,0,0,0);
+		}
+		return $ret;
+	}
+
+	function Price_feature($item){
+		$ret=array();
+		$price=$item['Price'];
+		if($price>=0 and $price<20){
+			array_push($ret,1,0,0,0,-1);
+		}
+		elseif ($price>=20 and $price<40){
+			array_push($ret,1,1,0,0,0);
+		}
+		elseif ($price>=40 and $price<60){
+			array_push($ret,0,1,1,1,0);
+		}
+		elseif ($price>=60){
+			array_push($ret,0,0,0,1,1);
+		}
+		else{
+			array_push($ret,0,0,0,0,0);
+		}
+		return $ret;
+	}
 
 	function isOnline($user, $connection){
 		$lastLogin = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
@@ -209,8 +366,38 @@
 
     }
    }  
+
    return $output;
   }		
+
+  function display_recommend_item($userinfo=array()){
+   $output = "";
+   if (!empty($userinfo)){ 
+   	for ($i = 0; $i < sizeof($userinfo); $i++){
+   	   $curItem = array();
+   	 $output .= $userinfo[$i]['img'];
+     $output .=$userinfo[$i]['item_name'] . "<br />";
+	$output .=$userinfo[$i]['Type'] . "<br />" ;
+     $output .=$userinfo[$i]['Taste'] . "<br />"; 
+     $output .=$userinfo[$i]['Nutrition'] . "<br />";
+     $output .=$userinfo[$i]['Price'] . "<br />";
+      $output .=$userinfo[$i]['sim_score'];
+
+     // http://stackoverflow.com/questions/6502107/how-to-pass-php-array-parameter-to-javascript-function
+     array_push($curItem, $userinfo[$i]['order-item'], $userinfo[$i]['order-seller'], $_SESSION['name']);
+     $Order = implode(",", $curItem);
+
+     $output .= '<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
+     $output .= "<hr />";
+     $output .= "</div>";
+     $output .= "<br /><br />";
+
+    }
+   }  
+   
+   return $output;
+  }		
+
 ?>
 
 <!DOCTYPE html>
@@ -416,15 +603,27 @@
 <div class="login">
 	<div class="container">
 		<div class="login-grids">
-			<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
-		   <?php echo display_item($items); 
-		    $_SESSION['queryString'] = "";
-		    /* $_POST['search'] = "";
-		     $_SESSION["h3"] = ""; */
-		   ?>
-		 <?php echo display_item($items_recommend); 
-		    $_SESSION['queryString'] = "";
-		   ?> 
+			<div class="row">
+
+				<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
+					<div class="col-sm-9 col-md-9 col-lg-9">
+			   <?php echo display_item($items); 
+			    $_SESSION['queryString'] = "";
+			    /* $_POST['search'] = "";
+			     $_SESSION["h3"] = ""; */
+			   ?>
+				</div>
+				<div class="col-sm-3 col-md-3 col-lg-3">
+					<h4 id="message">Items you might interested in<br/></h3>
+							<?php echo display_recommend_item($items_recommend); 
+				    $_SESSION['queryString'] = "";
+				    /* $_POST['search'] = "";
+				     $_SESSION["h3"] = ""; */
+				   ?>
+				</div>
+			</div>
+			
+		 
 
 			<div class="clearfix"></div>
 		</div>

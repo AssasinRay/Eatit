@@ -31,7 +31,7 @@
    // $query = "delete from User full join Product.Username on User.Username = Product.Username";
   //  $query = "DELETE a FROM User AS a INNER JOIN Product AS b ON a.Username = b.Username";
     $query1 = "DELETE User, Product from User LEFT JOIN Product on User.Username = Product.Username where User.Username = '$username'";
-    $result1 = mysqli_query($connection, $query);
+    $result1 = mysqli_query($connection, $query1);
 
     $query2 = "DELETE from Chatlog where sender = '$username' or receiver = '$username'";
     $result2 = mysqli_query($connection, $query2);

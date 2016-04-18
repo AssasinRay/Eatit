@@ -1,4 +1,5 @@
 <?php 
+require('yelp.php');
    session_start();
 /*
    	if (!$_SESSION['queryString'])
@@ -604,7 +605,7 @@
 	<div class="container">
 		<div class="login-grids">
 			<div class="row">
-
+				<p ><?php echo query_yelp_api("bars","San Francisco, CA"); ?> </p><br />
 				<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
 					<div class="col-sm-9 col-md-9 col-lg-9">
 			   <?php echo display_item($items); 

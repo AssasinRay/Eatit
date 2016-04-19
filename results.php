@@ -58,7 +58,13 @@ require('yelp.php');
 			    $search_item['Taste']=$row['Taste'];
 			    $search_item['Nutrition']=$row['Nutrition'];
 			    $search_item['Price']=$row['Price'];
+			 //   $newItem['order-item'] = $row['item_name'];
+			 //   $newItem['order-seller'] = $row['Username'];
 
+			    $cur = array();
+			    array_push($cur, $row['item_name'], $row['Username'], $_SESSION['name']);
+			    $details = implode(",", $cur);
+			    $newItem['Order'] = '<button id="order-item" onclick="order_item(\'' . $details . '\')">ORDER</button><br />';
                 /*
                 if(isOnline($row['Username'], $connection) == true)
                 	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
@@ -81,24 +87,11 @@ require('yelp.php');
        				 break;
    				 } 
 
-   				 /*
-   				 $lastLogin = mysqli_fetch_row($temp1);
-   				 $lastLogin = (int)$lastLogin['LastLogIn'];
-
-   				 $lastLogOut = mysqli_fetch_row($temp2);
-   				 $lastLogout = (int)$lastLogout['LastLogOut'];
-   				 */
-
-				//echo $lastLogin . "<br />";
-				//echo $lastLogOut;
-   				 //'<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
-
 				if ($lastLogin > $lastLogOut )
 					$newItem['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
 				else
 					$newItem['chat'] = "";
-			    $newItem['order-item'] = $row['item_name'];
-			    $newItem['order-seller'] = $row['Username'];
+
 			    array_push($items, $newItem);
 			    array_push($items_search_result,$search_item);
 		
@@ -340,35 +333,38 @@ require('yelp.php');
 	}		 	
   	        
 
-	function display_item($userinfo=array()){
-   $output = "";
-   if (!empty($userinfo)){ 
-   	for ($i = 0; $i < sizeof($userinfo); $i++){
-   	   $curItem = array();
-   	 $output .= $userinfo[$i]['img'];
-     $output .=$userinfo[$i]['item_name'] . "<br />";
-	$output .=$userinfo[$i]['Type'] . "<br />" ;
-     $output .=$userinfo[$i]['Taste'] . "<br />"; 
-     $output .=$userinfo[$i]['Ready_time'] . "<br />";
-     $output .=$userinfo[$i]['Nutrition'] . "<br />";
-     $output .=$userinfo[$i]['Price'] . "<br />";
-     $output .=$userinfo[$i]['Date'] . "<br />";
-     $output .=$userinfo[$i]['Seller'];
-     $output .= "&nbsp;&nbsp;". $userinfo[$i]['chat']  ."<br />";
+function display_item($iteminfo=array()){
+   $res = "";
+   if (!empty($iteminfo)){ 
+   	for ($i = 0; $i < sizeof($iteminfo); $i++){
+   	   $curr = array();
+   	 $res .= $iteminfo[$i]['img'];
+     $res .=$iteminfo[$i]['item_name'] . "<br />";
+	$res .=$iteminfo[$i]['Type'] . "<br />" ;
+     $res .=$iteminfo[$i]['Taste'] . "<br />"; 
+     $res .=$iteminfo[$i]['Ready_time'] . "<br />";
+     $res .=$iteminfo[$i]['Nutrition'] . "<br />";
+     $res .=$iteminfo[$i]['Price'] . "<br />";
+     $res .=$iteminfo[$i]['Date'] . "<br />";
+     $res .=$iteminfo[$i]['Seller'];
+     $res .= "&nbsp;&nbsp;". $iteminfo[$i]['chat']  ."<br />";
 
      // http://stackoverflow.com/questions/6502107/how-to-pass-php-array-parameter-to-javascript-function
-     array_push($curItem, $userinfo[$i]['order-item'], $userinfo[$i]['order-seller'], $_SESSION['name']);
-     $Order = implode(",", $curItem);
+    /*
+     array_push($curr, $iteminfo[$i]['order-item'], $iteminfo[$i]['order-seller'], $_SESSION['name']);
+     $Details = implode(",", $curr);
 
-     $output .= '<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
-     $output .= "<hr />";
-     $output .= "</div>";
-     $output .= "<br /><br />";
+     $res .= '<button id="order-item" onclick="order_item(\'' . $Details . '\')">ORDER</button><br />';
+     */
+     $res .= $iteminfo[$i]['Order'];
+     $res .= "<hr />";
+     $res .= "</div>";
+     $res .= "<br /><br />";
 
     }
    }  
 
-   return $output;
+   return $res;
   }		
 
   function display_recommend_item($userinfo=array()){
@@ -485,22 +481,31 @@ require('yelp.php');
            	   //alert(item);
            	 // alert('Delete called!');
            	  var order_info = info.split(',');
+           	  console.log(order_info);
            	  var item = order_info[0];
            	  var seller = order_info[1];
            	  var buyer = order_info[2];
+              var message = prompt("Leave a message to the seller regarding this order (optional): ");
 
-           	   /*
+              console.log("item: " + item);
+              console.log("seller: " + seller);
+              console.log("buyer: " + buyer);
+              console.log("message: " + message);
+           	   
            	   var target = item;
                $.ajax({
-                   url: 'delete-item.php',
-                   data: {item_name: target},
+                   url: 'place-order.php',
+                   data: {Item: item, Seller: seller, Buyer: buyer, Notes: message},
                    type: 'POST',
-                   success: function(){
-                   	   alert('The item has been successfully deleted. Refresh the page and you will no longer see it.');
-                   }
- 
+                   success: function(response){
+                   	 // alert('Your order has been placed successfully. Thank you.');
+                   	 console.log(response);
+                   },
+ 		  		   error: function(){
+ 		  		   	   console.log("Can't place order.");
+ 		  		   } 
                });
-			  */
+			  
            }
 		</script>
 </head>

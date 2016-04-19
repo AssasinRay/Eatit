@@ -190,7 +190,7 @@ require('yelp.php');
 		    $score[$i] = $items_recommend[$i]['sim_score'];
 		}
 		array_multisort($score, SORT_DESC, $items_recommend);
-		return $items_recommend;
+		return array_slice($items_recommend,0,10);
 
 
 	}

@@ -3,6 +3,7 @@
    $buyer = $_POST['Buyer'];
    $seller = $_POST['Seller'];
    $notes = $_POST['Notes'];
+   $status = "in progress";
 
    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -18,8 +19,17 @@
 	    die("Database Selection Failed" );
 	}
 
+   $getPhone = "SELECT * FROM User where Username = '$buyer'";
+   $result = mysqli_query($connection, $getPhone);
+  if (!$result)
+       echo "ERROR: " . mysqli_error($connection);
 
-    $queryStr = "INSERT INTO Orders (buyer, seller, itemName, notes) values ('$buyer', '$seller', '$item', '$notes')";
+   while($row = mysqli_fetch_assoc($result)){
+        $phoneNum = $row['phone_num'];
+        break;
+      }
+
+    $queryStr = "INSERT INTO Orders (buyer, seller, itemName, notes, buyerContact, status) values ('$buyer', '$seller', '$item', '$notes', '$phoneNum', '$status')";
     $query = mysqli_query($connection, $queryStr);
     if (!$query)
        echo "ERROR: " . mysqli_error($connection);

@@ -109,7 +109,7 @@ if (isset($_POST['submit'])){
 
 		        $result = mysqli_query($connection,$query);
 		        if(!$result){
-		        	die("Database error: " . mysqli_error($connection));
+		        	die("Database error." );
 		        }
             }
  			
@@ -127,16 +127,6 @@ if (isset($_POST['submit'])){
    }
    return $output;
   }
-
-/*
-   function delete_item($item){
-         ?><script>alert("called"); </script><?php
-         $query = "DELETE from Product where item_name = '$item' " ;
-         $result = mysqli_query($connection, $query);
-         if (!$result)
-            echo "Unknown Error: failed to delete item";
-     }
-*/
 
 ?>
 
@@ -172,7 +162,16 @@ if (isset($_POST['submit'])){
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
-
+ 
+ 				$.ajax({
+						url: "get-requests.php",
+						type: "get", 
+						data:{User: user},
+						  success: function(response) {
+							chats.html(response);
+							display_chat.fadeIn(100);
+						},
+						});
 
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
@@ -182,8 +181,10 @@ if (isset($_POST['submit'])){
 
                 var display_chat = $('#display-chats');
                 var chats = $('#all-chats');
+                var display_order = $('#display-orders');
+                var orders = $('#all-orders');
+
                 var user = "<?php echo $_SESSION['name']; ?>";
-				//$("#Name").text(out.User);
 
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
@@ -191,28 +192,50 @@ if (isset($_POST['submit'])){
 
 				$('#add-item-button').click(function(){
 					display_form.hide();
+					display_order.hide();
+					display_chat.hide();
 					add_form.toggle(300);
 				});
 
 				$('#show-item-button').click(function(){
                     add_form.hide();
-               
+                    display_order.hide();
+                    display_chat.hide();
                     $.post('getitems.php', {name: user}, function(data){
                         items.html(data);
-                        display_form.show(100);
+                        display_form.fadeIn(100);
                     });
+				});
+
+				$("#order-button").click(function(){
+					add_form.hide();
+					display_form.hide();
+					display_chat.hide();
+					$.ajax({
+						url: "get-orders.php",
+						type: "GET",
+						data:{User: user},
+						  success: function(response) {
+							orders.append(response);
+							display_order.fadeIn(200);
+						},
+						  error: function(xhr) {
+						    console.log("Failed to retrieve orders.");
+						  }
+						});
 				});
 
 				$('#chat-button').click(function(){
 					add_form.hide();
 					display_form.hide();
+					display_order.hide();
 					$.ajax({
 						url: "get-requests.php",
 						type: "get", 
 						data:{User: user},
 						  success: function(response) {
 							chats.html(response);
-							display_chat.show(100);
+							display_chat.fadeIn(100);
 						},
 						  error: function(xhr) {
 						    console.log("Failed to retrieve chat request.");
@@ -233,19 +256,46 @@ if (isset($_POST['submit'])){
                });
            }
 
+           function transaction_complete(orderID){
+           	
+           	 //var res = confirm("");
+           	 $.ajax({
+                   url: 'delete-order.php',
+                   data: {ID: orderID, Status: "complete"},
+                   type: 'GET',
+                   success: function(){
+                   	   alert("Transaction complete.");
+                   	   location.reload();
+                   }
+               });
+           }
+
+           function deletePlacedOrder(orderID){
+           	 var res = confirm("Are you sure you want to cancel this order?");
+           	 if (!res) return;
+	           	 $.ajax({
+	                   url: 'delete-order.php',
+	                   data: {ID: orderID, Status: ""},
+	                   type: 'GET',
+	                   success: function(){
+	                   	   alert("Success. The order has been cancelled.");
+	                   	   location.reload();
+	                   }
+	               });
+           }
+
            function accept_chat(url){
            	    // first delete the request (mark the request as accepted)
            	    var user = "<?php echo $_SESSION['name']; ?>";
             	$.ajax({
                    url: 'delete-chat.php',
                    data: {User: user},
-                   type: 'get',
+                   type: 'GET',
                    success: function(){
                    	     	// upon success, redirect user to chat interface
            	 				window.location = url;
                    }
                });
-          
            }
 
 		</script>
@@ -447,7 +497,7 @@ if (isset($_POST['submit'])){
 			<div class="clearfix"></div>
 		</div>
  
-        <!--display items form -->
+        <!--display items-->
         <div id="display-form">
 			<div class="reg-form">
 				<div class="reg" id="all-items">
@@ -457,6 +507,17 @@ if (isset($_POST['submit'])){
 			<div class="clearfix"></div>
 		</div>
 
+		<!--display orders-->
+		 <div id="display-orders">
+			<div class="reg-form">
+				<div class="reg" id="all-orders">
+						
+        	    </div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+		 <!--display chats-->
 		 <div id="display-chats">
 			<div class="reg-form">
 				<div class="reg" id="all-chats">
@@ -465,6 +526,8 @@ if (isset($_POST['submit'])){
 			</div>
 			<div class="clearfix"></div>
 		</div>
+
+
 
 	</div>
 </div>

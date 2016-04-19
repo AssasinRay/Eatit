@@ -26,6 +26,8 @@ require('yelp.php');
 	//recommended items
 	$items_search_result=array();
 	$items_recommend = array();
+	$location="Champaign,IL";
+	$yelp_recommend=array();
 
 	if (!$connection){
 	    die("Database Connection Failed");
@@ -54,6 +56,7 @@ require('yelp.php');
 			    $newItem['Price'] = "<b>Price: " ."&nbsp;&nbsp;&nbsp;</b>". "$". $row['Price'];
 			    $newItem['Date'] = "<b>Date Added: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Date_add'];
 			    $newItem['Seller'] = "<b>Sold by: " ."&nbsp;&nbsp;&nbsp;</b>". $row['Username'];
+			    $search_item['item_name']=$row['item_name'];
 			    $search_item['Type']=$row['Type'];
 			    $search_item['Taste']=$row['Taste'];
 			    $search_item['Nutrition']=$row['Nutrition'];
@@ -113,7 +116,20 @@ require('yelp.php');
 			else
 			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
 
+			 recommend_yelp($location,$items_search_result);
 
+	function recommend_yelp($location,$items_search_result){
+		$recommend_array=array();
+		// if(empty($items_search_result)){
+
+		// }
+		$items=query_yelp_api("bars","San Francisco, CA");
+		// echo $items[0]['name'];
+		// echo $items[0]['url'];
+		// echo $items[0]['rating'];
+		// echo $items[0]['location'];
+
+	}
 	function recommend_system($connection,$items_search_result){
 
 		$recommended_result = mysqli_query($connection, "SELECT * FROM Product ");
@@ -610,7 +626,7 @@ function display_item($iteminfo=array()){
 	<div class="container">
 		<div class="login-grids">
 			<div class="row">
-				<p ><?php echo query_yelp_api("bars","San Francisco, CA"); ?> </p><br />
+				<!-- <p ><?php echo query_yelp_api("bars","San Francisco, CA"); ?> </p><br /> -->
 				<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
 					<div class="col-sm-9 col-md-9 col-lg-9">
 			   <?php echo display_item($items); 

@@ -10,7 +10,7 @@ $TOKEN_SECRET = 'otKlW3rqx__K-VjO57BQRZyhiRs';
 $API_HOST = 'api.yelp.com';
 $DEFAULT_TERM = 'dinner';
 $DEFAULT_LOCATION = 'San Francisco, CA';
-$SEARCH_LIMIT = 3;
+$SEARCH_LIMIT = 2;
 $SEARCH_PATH = '/v2/search/';
 $BUSINESS_PATH = '/v2/business/';
 
@@ -92,11 +92,40 @@ function get_business($business_id) {
     return request($GLOBALS['API_HOST'], $business_path);
 }
 
-function query_yelp_api($term, $location) {     
-    $response = json_decode(search($term, $location));
-    // $business_id = $response->businesses[0]->id;  
-    // $response = get_business($business_id);
-    return $response->businesses;
+function query_yelp_api($term, $location) {   
+    $ret=array();  
+      {
+        $item1=array();
+         $response = json_decode(search($term, $location));
+        $business_id = $response->businesses[0]->id;
+            
+            $response = get_business($business_id);
+
+            $item1['name']= json_decode($response)->name;
+            $item1['url']= json_decode($response)->url;
+            $item1['rating']= json_decode($response)->rating_img_url;
+            $item1['location']= implode(json_decode($response)->location->display_address);
+
+
+       }
+       {
+        $item2=array();
+         $response = json_decode(search($term, $location));
+        $business_id = $response->businesses[0]->id;
+            
+            $response = get_business($business_id);
+
+            $item2['name']= json_decode($response)->name;
+            $item2['url']= json_decode($response)->url;
+            $item2['rating']= json_decode($response)->rating_img_url;
+            $item2['location']= implode(json_decode($response)->location->display_address);
+
+
+       }
+
+       array_push($ret,$item1,$item2);
+       return $ret;
+
 }
 
 query_yelp_api($term, $location);

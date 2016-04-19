@@ -105,6 +105,7 @@ function query_yelp_api($term, $location) {
             $item1['url']= json_decode($response)->url;
             $item1['rating']= json_decode($response)->rating_img_url;
             $item1['location']= implode(json_decode($response)->location->display_address);
+            $item1['img']= json_decode($response)->image_url;
 
 
        }
@@ -119,6 +120,7 @@ function query_yelp_api($term, $location) {
             $item2['url']= json_decode($response)->url;
             $item2['rating']= json_decode($response)->rating_img_url;
             $item2['location']= implode(json_decode($response)->location->display_address);
+            $item2['img']= json_decode($response)->image_url;
 
 
        }

@@ -1260,7 +1260,7 @@ color: #000;
 }
 .reg-form{
 float:left;
-width:50%
+width:60%
 }
 .reg-right{
 float:right;
@@ -4342,4 +4342,9 @@ li.data.order-special {
 
 #clearfloat {
   clear:both;
+}
+
+#display-orders, #display-chats {
+  padding-left: 28%;
+  margin-top:5%;
 }

@@ -20,7 +20,7 @@
 	}
 
     // 0 for request hasn't been answered, 1 for the contrary
-    $queryStr = "INSERT INTO ChatRequests (initiator, responder, requestStatus, url) values ('$initiator','$responder', 0, '$url')";
+    $queryStr = "INSERT INTO ChatRequests (initiator, responder, url) values ('$initiator','$responder', '$url')";
     $query = mysqli_query($connection, $queryStr);
     if (!$query)
        echo "ERROR: " . mysqli_error($connection)

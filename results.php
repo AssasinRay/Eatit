@@ -676,14 +676,14 @@ function display_item($iteminfo=array()){
 				</div>
 				<div class="col-sm-3 col-md-3 col-lg-3">
 
-		<h4 id="message">Yelp Recommend<br/><br/></h4>
+		<h4 id="message">Yelp's Recommendations<br/><br/></h4>
 							<?php echo display_yelp($yelp_recommend); 
 				    $_SESSION['queryString'] = "";
 				    /* $_POST['search'] = "";
 				     $_SESSION["h3"] = ""; */
 				   ?> 
 
-					<h4 id="message">Items you might interested in<br/><br/></h4>
+					<h4 id="message">Items you might be interested in<br/><br/></h4>
 							<?php echo display_recommend_item($items_recommend); 
 				    $_SESSION['queryString'] = "";
 				    /* $_POST['search'] = "";

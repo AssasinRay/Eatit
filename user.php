@@ -246,12 +246,15 @@ if (isset($_POST['submit'])){
 
            function delete_item(item){
            	   var target = item;
+           	   var ans = confirm("Are you sure you want to delete this item?");
+           	   if (!ans) return;
                $.ajax({
                    url: 'delete-item.php',
                    data: {item_name: target},
                    type: 'POST',
                    success: function(){
-                   	   alert('The item has been successfully deleted. Refresh the page and you will no longer see it.');
+                   	   alert('Item deleted.');
+                   	   location.reload();
                    }
                });
            }
@@ -416,7 +419,7 @@ if (isset($_POST['submit'])){
   		</div>
 		
 		<div id="item-form">
-			<div class="reg-form">
+			<div class="reg-form" style="width:50%">
 				<div class="reg">
 					 <p>Please enter the following information for the new item you plan to sell.</p>
 					 <o>Having added the item successfully, the item will show up upon clicking the "MY ITEMS" button above.</p>

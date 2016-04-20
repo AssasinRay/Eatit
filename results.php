@@ -116,18 +116,29 @@ require('yelp.php');
 			else
 			 	 $_SESSION["h3"] = "Sorry, no matching results were found."; 
 
-			 recommend_yelp($location,$items_search_result);
+			$yelp_recommend=recommend_yelp($location,$items_search_result);
 
-	function recommend_yelp($location,$items_search_result){
-		$recommend_array=array();
-		// if(empty($items_search_result)){
+	function recommend_yelp($location,$items_search_result=array()){
 
-		// }
-		$items=query_yelp_api("bars","San Francisco, CA");
-		// echo $items[0]['name'];
-		// echo $items[0]['url'];
-		// echo $items[0]['rating'];
-		// echo $items[0]['location'];
+		$ret=array();
+		$items=array();
+		if(empty($items_search_result)){
+			$items=query_yelp_api("food",$location);
+		}
+		else
+		{
+			$items=query_yelp_api($items_search_result[0]['item_name'],$location);
+		}
+		for($i=0;$i<sizeof($items);$i++){
+			$newItem=array();
+			$newItem['img'] = '<div class=\"user-info\"><a href="'.$items[$i]['url'].'"><img src="' . ($items[$i]['img']). '" class="item-img" width="160px" height="100px" /><br /></a>';
+			$newItem['name'] = "<b>". $items[$i]['name'] ."</b>";
+			$newItem['rating'] = '<div class=\"user-info\"><img src="'. ($items[$i]['rating']). '" class="item-img" /><br />';
+			$newItem['location'] = $items[$i]['location'];
+			array_push($ret,$newItem);
+		}
+
+		return $ret;
 
 	}
 	function recommend_system($connection,$items_search_result){
@@ -383,7 +394,30 @@ function display_item($iteminfo=array()){
    return $res;
   }		
 
-  function display_recommend_item($userinfo=array()){
+  function display_yelp($userinfo=array()){
+   $output = "";
+   if (!empty($userinfo)){ 
+   	for ($i = 0; $i < sizeof($userinfo); $i++){
+   	   // $curItem = array();
+   	 $output .= $userinfo[$i]['img'];
+     $output .=$userinfo[$i]['name'] ;
+	$output .=$userinfo[$i]['rating'] ;
+     $output .=$userinfo[$i]['location'] . "<br />"; 
+
+     // http://stackoverflow.com/questions/6502107/how-to-pass-php-array-parameter-to-javascript-function
+     // array_push($curItem, $userinfo[$i]['order-item'], $userinfo[$i]['order-seller'], $_SESSION['name']);
+     // $Order = implode(",", $curItem);
+
+     // $output .= '<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
+     $output .= "<hr />";
+     $output .= "</div>";
+    }
+   }  
+   
+   return $output;
+  }	
+
+    function display_recommend_item($userinfo=array()){
    $output = "";
    if (!empty($userinfo)){ 
    	for ($i = 0; $i < sizeof($userinfo); $i++){
@@ -393,23 +427,19 @@ function display_item($iteminfo=array()){
 	$output .=$userinfo[$i]['Type'] . "<br />" ;
      $output .=$userinfo[$i]['Taste'] . "<br />"; 
      $output .=$userinfo[$i]['Nutrition'] . "<br />";
-     $output .=$userinfo[$i]['Price'] . "<br />";
-      $output .=$userinfo[$i]['sim_score'];
 
      // http://stackoverflow.com/questions/6502107/how-to-pass-php-array-parameter-to-javascript-function
      array_push($curItem, $userinfo[$i]['order-item'], $userinfo[$i]['order-seller'], $_SESSION['name']);
-     $Order = implode(",", $curItem);
+     // $Order = implode(",", $curItem);
 
-     $output .= '<button id="order-item" onclick="order_item(\'' . $Order . '\')">ORDER</button><br />';
      $output .= "<hr />";
      $output .= "</div>";
-     $output .= "<br /><br />";
 
     }
    }  
    
    return $output;
-  }		
+  }			
 
 ?>
 
@@ -626,7 +656,6 @@ function display_item($iteminfo=array()){
 	<div class="container">
 		<div class="login-grids">
 			<div class="row">
-				<!-- <p ><?php echo query_yelp_api("bars","San Francisco, CA"); ?> </p><br /> -->
 				<h3 id="message"><?php echo $_SESSION['h3']; ?> </h3><br />
 					<div class="col-sm-9 col-md-9 col-lg-9">
 			   <?php echo display_item($items); 
@@ -636,7 +665,15 @@ function display_item($iteminfo=array()){
 			   ?>
 				</div>
 				<div class="col-sm-3 col-md-3 col-lg-3">
-					<h4 id="message">Items you might interested in<br/></h3>
+
+		<h4 id="message">Yelp Recommend<br/><br/></h4>
+							<?php echo display_yelp($yelp_recommend); 
+				    $_SESSION['queryString'] = "";
+				    /* $_POST['search'] = "";
+				     $_SESSION["h3"] = ""; */
+				   ?> 
+
+					<h4 id="message">Items you might interested in<br/><br/></h4>
 							<?php echo display_recommend_item($items_recommend); 
 				    $_SESSION['queryString'] = "";
 				    /* $_POST['search'] = "";

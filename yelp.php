@@ -64,10 +64,10 @@ function request($host, $path) {
 
         curl_close($ch);
     } catch(Exception $e) {
-        trigger_error(sprintf(
-            'Curl failed with error #%d: %s',
-            $e->getCode(), $e->getMessage()),
-            E_USER_ERROR);
+        // trigger_error(sprintf(
+        //     'Curl failed with error #%d: %s',
+        //     $e->getCode(), $e->getMessage()),
+        //     E_USER_ERROR);
     }
     
     return $data;
@@ -104,6 +104,7 @@ function query_yelp_api($term, $location) {
             $item1['name']= json_decode($response)->name;
             $item1['url']= json_decode($response)->url;
             $item1['rating']= json_decode($response)->rating_img_url;
+            if(is_array(json_decode($response)->location->display_address))
             $item1['location']= implode(json_decode($response)->location->display_address);
             $item1['img']= json_decode($response)->image_url;
 
@@ -112,13 +113,14 @@ function query_yelp_api($term, $location) {
        {
         $item2=array();
          $response = json_decode(search($term, $location));
-        $business_id = $response->businesses[0]->id;
+        $business_id = $response->businesses[1]->id;
             
             $response = get_business($business_id);
 
             $item2['name']= json_decode($response)->name;
             $item2['url']= json_decode($response)->url;
             $item2['rating']= json_decode($response)->rating_img_url;
+            if(is_array(json_decode($response)->location->display_address))
             $item2['location']= implode(json_decode($response)->location->display_address);
             $item2['img']= json_decode($response)->image_url;
 

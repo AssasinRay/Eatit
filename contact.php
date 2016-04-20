@@ -1,11 +1,17 @@
+<?php
+	// require('dbconnect.php');
+    session_start();
+
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Contact</title>
+	<title>Register</title>
 	<!--fonts-->
-		<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.useso.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lato:700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
 		
 	<!--//fonts-->
 			<link href="css/bootstrap.css" rel="stylesheet">
@@ -32,6 +38,24 @@
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
+
+			    var User = "<?php echo $_SESSION['name']; ?>";
+      
+				if (!User){
+					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
+					    content1 += " | ";
+						content1 += "<li id=\"register_link\"><a href=\"register.php\">Register</a></li></ul>";
+					$(".login-section").html(content1);
+				}
+				else {
+					var content2 = "<ul><li id=\"logout_link\">";
+						content2 += "<form action=\"logout.php\" method=\"post\">";
+						content2 += "<input type=\"submit\" name=\"submit\" value=\"Sign Out\" id=\"logoutbutton\" />";
+						content2　+= " | ";
+						content2 += "<a href=\"user.php\">My Homepage</a>";
+						content2 += "</form></li></ul>";
+					$(".login-section").html(content2);
+				}
 			});
 		</script>
 	<!-- start-smoth-scrolling -->
@@ -43,18 +67,22 @@
 	<div class="container">
 		<div class="top-header">
 				<div class="header-left">
-					<p>Place your order and get 20% off on each price</p>
+					<!--<p>Place your order and get 20% off on each price</p>-->
 				</div>
 				<div class="login-section">
 					<ul>
-						<li><a href="login.html">Login</a>  </li> |
-						<li><a href="register.html">Register</a> </li>
+						<li id="logout_link">
+						<form action="logout.php" method="post">
+							<input type="submit" name="submit" value="Sign Out" id="logoutbutton"/> | 
+							<a href="user.php">My Homepage</a>
+						</form>
+						</li>
 					</ul>
 				</div>
 				<!-- start search-->
 				    <div class="search-box">
-					    <div id="sb-search" class="sb-search">
-							<form>
+						<div id="sb-search" class="sb-search">
+							<form action="changeaddr.php" method="post">
 								<input class="sb-search-input" placeholder="Enter your search item..." type="search" name="search" id="search">
 								<input class="sb-search-submit" type="submit" value="">
 								<span class="sb-icon-search"> </span>
@@ -69,6 +97,7 @@
 						</script>
 				<!-- //search-scripts -->
 				<div class="header-right">
+					<!--
 						<div class="cart box_1">
 							<a href="checkout.html">
 								<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)<img src="images/bag.png" alt=""></h3>
@@ -76,6 +105,7 @@
 							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
 							<div class="clearfix"> </div>
 						</div>
+					-->
 				</div>
 				<div class="clearfix"></div>
 		</div>
@@ -91,12 +121,12 @@
 							<div class="navigation text-center">
 								<span class="menu"><img src="images/menu.png" alt=""/></span>
 									<ul class="nav1">
-										<li><a href="index.html">HOME</a></li>
-										<li><a href="about.html">ABOUT</a></li>
-										<li><a href="menu.html">OUR MENU</a></li>
-										<li><a href="gallery.html">GALLERY</a></li>
-										<li><a href="typography.html">TODAY'S SPECIAL</a>
-										<li><a class="active" href="contact.html">CONTACT</a></li>
+										<li><a href="index.php">HOME</a></li>
+										<li><a href="#">ABOUT</a></li>
+										<li><a href="#">MENU</a></li>
+										<li><a href="#">GALLERY</a></li>
+										<li><a href="#">TODAY'S SPECIAL</a>
+										<li><a href="#">CONTACT</a></li>
 										<div class="clearfix"></div>
 									</ul>
 									<!-- script for menu -->
@@ -112,13 +142,15 @@
 							</div>
 							<!-- point burst circle -->
 							<div class="logo">
-								<a href="index.html">
+								<a href="index.php">
 									<div class="burst-36 ">
 									   <div>
 											<div><span><img src="images/logo.png" alt=""/></span></div>
 									   </div>
 									</div>
-									<h1>FAVORITES</h1>
+									<div align="center">
+									<h1>EATIT</h1>
+								</div>
 								</a>
 							</div>
 							<!-- //point burst circle -->
@@ -128,81 +160,46 @@
 					</div>
 	</div>
 </div>
-
 <!-- //banner -->
-<!-- contact-page -->
-<div class="contact">
+<!-- registration-form -->
+
+<div class="registration-form">
 	<div class="container">
-		<div class="contact-info">
-			<h3>VIEW ON MAP</h3>
-			<div class="strip-line"></div>
-		</div>
-		<div class="contact-map">
-			<iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d2482.432383990807!2d0.028213999961443994!3d51.52362882484525!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sin!4v1423469959819" frameborder="0" style="border:0"></iframe>
-		</div>
-		<div class="contact-form">
-			<div class="contact-info">
-				<h3>CONTACT FORM</h3>
-				<div class="strip-line"></div>
+		<div id="profile-info">
+			<div class="reg-form">
+				<div class="reg">
+					
+					<h4>Daocun Yang: dyang35@illinois.edu</h4><br />
+					<h4>Yiwei Zhuang: yizhuan2@illinois.edu</h4><br />
+					<h4>Yang Song: ysong71@illinois.edu</h4><br />
+					<h4>Yang Yao: yangyao2@illinois.edu</h4><br />
+
+						 
+					 
+				 </div>
 			</div>
-			<form>
-				<div class="contact-left">
-					<input type="text" placeholder="Name" required>
-					<input type="text" placeholder="E-mail" required>
-					<input type="text" placeholder="Subject" required>
-				</div>
-				<div class="contact-right">
-					<textarea placeholder="Message" required></textarea>
-				</div>
-				<div class="clearfix"></div>
-				<input type="submit" value="SUBMIT">
-			</form>
+			<div class="clearfix"></div>
 		</div>
 	</div>
 </div>
-<!-- //contact-page -->
-<!-- footer-top -->
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
+
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">
 	<div class="container">
 		<div class="footer-left">
-			<p>Copyright &copy; 2015.Company name All rights reserved.More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></p>
+			<p>Copyright &copy; 2016 Eatit</p>
 		</div>
+		
 		<div class="footer-right">
 			<ul>
-				<li><a href="#" class="twitter"> </a></li>
-				<li><a href="#" class="facebook"> </a></li>
-				<li><a href="#" class="chrome"> </a></li>
-				<li><a href="#" class="pinterest"> </a></li>
-				<li><a href="#" class="linkedin"> </a></li>
-				<li><a href="#" class="dribbble"> </a></li>
+			   <li>Yiwei Zhuang<li>
+			   <li>Daocun Yang<li>
+			   	<li>Yang Yao<li>
+			   <li>Yang Song<li>		
 			</ul>
 		</div>
+	
 		<div class="clearfix"></div>
 	</div>
 </div>

@@ -177,7 +177,7 @@ if (isset($_POST['search'])){
 							
 							<div class="banner-info text-center">
 								<p>Tasty, Delicious & Safe Always!</p>
-								<div class="order"><a href="#">ORDER NOW</a></div>
+								<div class="order"><a href="login.php">ORDER NOW</a></div>
 							</div>
 						</div>
 					</div>
@@ -188,12 +188,12 @@ if (isset($_POST['search'])){
 							<div class="navigation text-center">
 								<span class="menu"><img src="images/menu.png" alt=""/></span>
 									<ul class="nav1">
-										<li><a class="active" href="index.php">HOME</a></li>
+										<li><a href="index.php">HOME</a></li>
 										<li><a href="">ABOUT</a></li>
 										<li><a href="">MENU</a></li>
 										<li><a href="">GALLERY</a></li>
 										<li><a href="">TODAY'S SPECIAL</a>
-										<li><a href="">CONTACT</a></li>
+										<li><a href="contact.php">CONTACT</a></li>
 										<div class="clearfix"></div>
 									</ul>
 									<!-- script for menu -->
@@ -339,8 +339,8 @@ if (isset($_POST['search'])){
 			</div>
 			<div class="col-md-4 welcome-grid">
 				<div class="welcome-gd second">
-					<h4>Title </h4>
-					<p> Some words here.
+					<h4>Fruit Salad </h4>
+					<p> Common ingredients used in fruit salads include strawberries, pineapple, honeydew, watermelon, grapes, banana, and kiwifruit. Yummy!
 					</p>
 				</div>
 			</div>
@@ -352,9 +352,8 @@ if (isset($_POST['search'])){
 			</div>
 			<div class="col-md-4 welcome-grid">
 				<div class="welcome-gd second">
-					<h4>Title </h4>
-					<p> Some words here.
-					</p>
+					<h4>Special Prawns </h4>
+					<p> Fresh, summery prawn salad. Secretly an updated version of prawn cocktail, but a million times better than that description makes it sound. 
 				</div>
 			</div>
 			<div class="col-md-4 welcome-grid-img">
@@ -365,8 +364,8 @@ if (isset($_POST['search'])){
 			</div>
 			<div class="col-md-4 welcome-grid">
 				<div class="welcome-gd second">
-					<h4>Title </h4>
-					<p> Some words here.
+					<h4>Carrot Egg </h4>
+					<p> Egg salad is part of a tradition of salads involving protein mixed with seasonings in the form of herbs, spices, and other foods, and bound with mayonnaise.
 					</p>
 				</div>
 			</div>
@@ -384,7 +383,7 @@ if (isset($_POST['search'])){
 		</div>
 		<div class="good-grids">
 			<div class="col-md-5 good-right">
-				<img src="images/pic12.jpg" alt=""/>
+				<img src="images/cake.jpg" alt=""/>
 				<div class="desc">
 					<p>DESERT</p>
 				</div>
@@ -392,8 +391,12 @@ if (isset($_POST['search'])){
 			<div class="col-md-7 good-left">
 				<h3>GOOD FOOD KEEPS YOU HEALTHY</h3>
 				<div class="strip"></div>
-				<p>Integer vitae ligula sed lectus consectetur pellentesque blandit nec orci. Nulla ultricies nunc et lorem semper, quis accumsan dui integer vitae ligula sed lectus consectetur pellentesque blandit nec orci. Nulla ultricies nunc et lorem semper, <span>quis accumsan dui aliquam aucibus sagittis placerat	Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers piciis </span>iste natus scele risque auctor volutpat et massa.</p>
-				<p>Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers piciis iste natus scele risque auctor volutpat et massa.</p>
+				<p>Our moist white crème cake with fresh
+								raspberry in whip cream and a whip cream frosting.</p>
+				<p>This classic originates from the Hotel Sacher in
+					Vienna, Austria. This cake is a chocolate cake with
+					a glorious raspberry filling. The cake is then covered in
+					chocolate buttercream and topped with raspberry.</p>
 			</div>
 			<div class="clearfix"></div>
 		</div>

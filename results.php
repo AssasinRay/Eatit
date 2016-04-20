@@ -63,11 +63,12 @@ require('yelp.php');
 			    $search_item['Price']=$row['Price'];
 			 //   $newItem['order-item'] = $row['item_name'];
 			 //   $newItem['order-seller'] = $row['Username'];
-
+			    /*
 			    $cur = array();
 			    array_push($cur, $row['item_name'], $row['Username'], $_SESSION['name']);
 			    $details = implode(",", $cur);
 			    $newItem['Order'] = '<button id="order-item" onclick="order_item(\'' . $details . '\')">ORDER</button><br />';
+			    */
                 /*
                 if(isOnline($row['Username'], $connection) == true)
                 	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
@@ -76,24 +77,32 @@ require('yelp.php');
                 	$newItem['chat'] = "False";
                 	*/
                 $user = $row['Username'];	
-                $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
-				$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
 
-                
-				 while ($row = mysqli_fetch_assoc($temp1)) {
-       				 $lastLogin = $row['LastLogIn'];
-       				 break;
-   				 } 
+                if ($user != $_SESSION['name']){
+                	 $cur = array();
+				    array_push($cur, $row['item_name'], $row['Username'], $_SESSION['name']);
+				    $details = implode(",", $cur);
+				    $newItem['Order'] = '<button id="order-item" onclick="order_item(\'' . $details . '\')">ORDER</button><br />';
 
-   				 while ($row2 = mysqli_fetch_assoc($temp2)) {
-       				 $lastLogOut = $row2['LastLogOut'];
-       				 break;
-   				 } 
+	                $temp1 = mysqli_query($connection, "SELECT LastLogIn FROM User where Username='$user'");
+					$temp2 =mysqli_query($connection, "SELECT LastLogOut FROM User where Username='$user'");	
 
-				if ($lastLogin > $lastLogOut )
-					$newItem['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
-				else
-					$newItem['chat'] = "";
+	                
+					 while ($row = mysqli_fetch_assoc($temp1)) {
+	       				 $lastLogin = $row['LastLogIn'];
+	       				 break;
+	   				 } 
+
+	   				 while ($row2 = mysqli_fetch_assoc($temp2)) {
+	       				 $lastLogOut = $row2['LastLogOut'];
+	       				 break;
+	   				 } 
+
+					if ($lastLogin > $lastLogOut )
+						$newItem['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
+					else
+						$newItem['chat'] = "";
+			}
 
 			    array_push($items, $newItem);
 			    array_push($items_search_result,$search_item);
@@ -190,6 +199,7 @@ require('yelp.php');
 				$recommended_item['chat'] =  '<button onclick="chat(\'' . $user . '\')">Chat</button>';
 			else
 				$recommended_item['chat'] = "";
+
 		    $recommended_item['order-item'] = $row['item_name'];
 		    $recommended_item['order-seller'] = $row['Username'];
 		    array_push($items_recommend, $recommended_item);
@@ -532,23 +542,23 @@ function display_item($iteminfo=array()){
            	  var seller = order_info[1];
            	  var buyer = order_info[2];
               var message = prompt("Leave a message to the seller regarding this order (optional): ");
-
+              /*
               console.log("item: " + item);
               console.log("seller: " + seller);
               console.log("buyer: " + buyer);
               console.log("message: " + message);
-           	   
+           	   */
            	   var target = item;
                $.ajax({
                    url: 'place-order.php',
                    data: {Item: item, Seller: seller, Buyer: buyer, Notes: message},
                    type: 'POST',
                    success: function(response){
-                   	 // alert('Your order has been placed successfully. Thank you.');
-                   	 console.log(response);
+                   	  alert('Your order has been placed successfully. Thank you.');
+                   	// console.log(response);
                    },
  		  		   error: function(){
- 		  		   	   console.log("Can't place order.");
+ 		  		   	   console.log("ERROR: your order cannot be placed.");
  		  		   } 
                });
 			  

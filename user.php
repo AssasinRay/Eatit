@@ -111,11 +111,13 @@ if (isset($_POST['submit'])){
 		        if(!$result){
 		        	die("Database error." );
 		        }
+		        $_POST['itemname'] = "";
             }
  			
     }
     else 
     	array_push($errors, "All fields are required");
+
 }
 
    function display_errors($errors=array()){
@@ -162,16 +164,7 @@ if (isset($_POST['submit'])){
 					event.preventDefault();
 					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
 				});
- 
- 				$.ajax({
-						url: "get-requests.php",
-						type: "get", 
-						data:{User: user},
-						  success: function(response) {
-							chats.html(response);
-							display_chat.fadeIn(100);
-						},
-						});
+ 		
 
 				//$("#Name").text(sessionStorage.User);
                 var add_form = $('#item-form');
@@ -186,6 +179,12 @@ if (isset($_POST['submit'])){
 
                 var user = "<?php echo $_SESSION['name']; ?>";
 
+               // var chatCount = 0;
+                setInterval(function(){
+                	poll_chat(user);
+                }, 4000);
+
+          
 				$("#logout_link").click(function(){
 					sessionStorage.clear();
 				});
@@ -216,7 +215,7 @@ if (isset($_POST['submit'])){
 						type: "GET",
 						data:{User: user},
 						  success: function(response) {
-							orders.append(response);
+							orders.html(response); // append() ?
 							display_order.fadeIn(200);
 						},
 						  error: function(xhr) {
@@ -242,7 +241,25 @@ if (isset($_POST['submit'])){
 						  }
 						});
 				});
+
+
 			});
+
+
+			 function poll_chat(user){
+ 		   	   		$.ajax({
+						url: "poll-chat.php",
+						type: "get", 
+						data:{User: user}, //, Count, chatCount},
+						  success: function(response) {
+						  	console.log(response);
+						  	if (response == "alert")	
+						  		alert("You've received a new chat request. Please go to MY CHATS to respond.");
+						  	//	chatCount = Number(response);
+						},
+					});
+				//	return chatCount;
+ 		   }
 
            function delete_item(item){
            	   var target = item;
@@ -260,7 +277,6 @@ if (isset($_POST['submit'])){
            }
 
            function transaction_complete(orderID){
-           	
            	 //var res = confirm("");
            	 $.ajax({
                    url: 'delete-order.php',
@@ -299,6 +315,12 @@ if (isset($_POST['submit'])){
            	 				window.location = url;
                    }
                });
+           }
+
+           function view_chat(url){
+           	   console.log(url);
+           	   if (url)
+           	   		window.location = url;
            }
 
 		</script>
@@ -486,6 +508,7 @@ if (isset($_POST['submit'])){
                              if (sizeof($errors) > 0){
                                 ?><script>alert("Error(s) detected in your input. \nPlease fill out the form again.");</script><?php 
                             }
+
 						 	?>
 						 </p>
 						 <div align="center" style="margin-top:2%">

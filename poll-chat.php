@@ -1,7 +1,6 @@
 <?php 
-   $initiator = $_GET['initiator'];
-   $responder = $_GET['responder'];
-   $url = $_GET['URL'];
+   $user = $_GET['User'];
+  // $count = $_GET['Count'];
 
    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -19,9 +18,16 @@
 
     $status = "pending";
     $seen = "no";
-    $queryStr = "INSERT INTO ChatRequests (initiator, responder, url, status, seen) values ('$initiator','$responder', '$url', '$status', '$seen')";
+    $queryStr = "SELECT * FROM ChatRequests where responder = '$user' and status='$status' and seen='$seen'";
     $query = mysqli_query($connection, $queryStr);
     if (!$query)
-       echo "ERROR: " . mysqli_error($connection)
+     echo "ERROR: " . mysqli_error($connection);
 
+    $get_rows= mysqli_affected_rows($connection);
+    if ($get_rows > 0){
+        echo "alert";
+        $seen = "yes";
+        $newQuery = "UPDATE ChatRequests SET seen='$seen' where responder = '$user' and status='$status'";
+        $query = mysqli_query($connection, $newQuery);
+    }
 ?>

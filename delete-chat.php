@@ -16,7 +16,9 @@
 	}
 
     // 0 for request hasn't been answered, 1 for the contrary
-    $queryStr = "DELETE FROM ChatRequests where responder = '$user'"; // or initiator = '$user' ";
+    //$queryStr = "DELETE FROM ChatRequests where responder = '$user'"; // or initiator = '$user' ";
+    $status = "completed";
+    $queryStr = "UPDATE ChatRequests SET status = '$status' where responder='$user'";
     $query = mysqli_query($connection, $queryStr);
     //echo "success";
 ?>

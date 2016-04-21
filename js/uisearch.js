@@ -91,7 +91,7 @@
 					ev.stopPropagation();
 					// trim its value
 					self.inputEl.value = self.inputEl.value.trim();
-					
+				//	self.close();
 					if( !classie.has( self.el, 'sb-search-open' ) ) { // open it
 						ev.preventDefault();
 						self.open();

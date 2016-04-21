@@ -524,6 +524,7 @@ function display_item($iteminfo=array()){
 						type: "get", 
 						data:{initiator: curUser, responder: seller, URL: url},
 						  success: function(response) {
+							//console.log(response);
 							window.location = url;
 						},
 						  error: function(xhr) {

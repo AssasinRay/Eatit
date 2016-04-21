@@ -17,13 +17,15 @@
 
     $queryStr = "SELECT * FROM Orders where seller='$user'";
     $query = mysqli_query($connection, $queryStr);
-
+    $get_rows= mysqli_affected_rows($connection);
     if (!$query)
        echo "ERROR: " . mysqli_error($connection);
     else {
-  //  $orders = array();
+  //  $orders = array();  
       $orders = '<p>Only click on "CONFIRM" after the transaction has been completed.</p><br />';
       $orders .= "<h4>Orders I've received: </h4>";
+
+  if ($get_rows != 0){
 
     while($row = mysqli_fetch_assoc($query)){
       //  $newRec = array();
@@ -32,11 +34,15 @@
         $content .=   $row['buyer'] . "'s phone number: " . $row['buyerContact'] . '<br />';
         $content .= "Order status: " . $row['status'] .  '<br /><br />';
         $orderID = $row['orderID'];
-        $content .= '<div align="center"><button id="delete-rec-order" onclick="transaction_complete(\'' .$orderID . '\')">CONFIRM</button></div><br /><br />';
+        if ($row['status'] != "complete")
+          $content .= '<div align="center"><button id="delete-rec-order" onclick="transaction_complete(\'' .$orderID . '\')">CONFIRM</button></div><br /><br />';
         $orders .= $content;
    //     array_push($newRec, $content);
    //     array_push($orders, $newRec);
       }
+    }
+    else 
+      $orders .= "<p>You have no pending orders at this time.</p>";
 
       $orders .= "<br />";
       $orders .= "<h4>Orders I've placed: </h4>";
@@ -47,6 +53,9 @@
       }
       
       else {
+        $get_rows2= mysqli_affected_rows($connection);
+        if ($get_rows2 != 0){
+
           while($row = mysqli_fetch_assoc($result)){
           $content = "You have placed an order on " . $row['seller'] . "'s item: " . $row['itemName'] . " on " . $row['date'] . '<br />';
           $content .= "Your message to " . $row['seller'] . ": " . $row['notes'] . '<br /><br />';
@@ -54,6 +63,9 @@
           $content .= '<div align="center"><button id="delete-place-order" onclick="deletePlacedOrder(\'' .$orderID . '\')">CANCEL THIS ORDER</button></div><br /><br />';
           $orders .= $content;
         }
+      }
+      else  
+         $orders .= "<p>You haven't placed any order yet. Get started by searching for something.</p>";
       }
 
      echo $orders;

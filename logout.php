@@ -1,7 +1,5 @@
 <?php 
 session_start();
-//$_SESSION['name'] = "";
-
 
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";

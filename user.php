@@ -68,17 +68,6 @@ if (isset($_POST['submit'])){
             // check to make sure it's an image, not a file of other types like text document
             if (!$image_size)
             	array_push($errors, "Please upload a valid image of your item");
-
-  /*
-       $width = $image_size[0];
-       $height = $image_size[1];
-       $new_size = ($width + $height)/($width*($height/50));
-       $new_width = $width * $new_size;
-       $new_height = $height * $new_size;
-       $new_img = imagecreatetruecolor($new_width, $new_height);
-       $old_img = imagecreatefromjpeg($file);
-       imagecopyresized($new_img, $old_img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-*/
        
 		switch($nutrition){
 			case "<200":
@@ -146,6 +135,7 @@ if (isset($_POST['submit'])){
 			
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
@@ -183,6 +173,10 @@ if (isset($_POST['submit'])){
                 setInterval(function(){
                 	poll_chat(user);
                 }, 4000);
+
+                setInterval(function(){
+                	poll_order(user);
+                }, 5000);
 
           
 				$("#logout_link").click(function(){
@@ -255,6 +249,21 @@ if (isset($_POST['submit'])){
 						  	console.log(response);
 						  	if (response == "alert")	
 						  		alert("You've received a new chat request. Please go to MY CHATS to respond.");
+						  	//	chatCount = Number(response);
+						},
+					});
+				//	return chatCount;
+ 		   }
+
+ 		   function poll_order(user){
+ 		   	   		$.ajax({
+						url: "poll-orders.php",
+						type: "get", 
+						data:{User: user}, //, Count, chatCount},
+						  success: function(response) {
+						  	console.log(response);
+						  	if (response == "alert")	
+						  		alert("You've received a new order. \nPlease go to MY ORDERS to view the details.");
 						  	//	chatCount = Number(response);
 						},
 					});

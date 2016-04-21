@@ -42,7 +42,7 @@ if (isset($_POST['search'])){
 			<link href="css/bootstrap.css" rel="stylesheet">
 			<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 			<link href="css/chatpage.css" rel="stylesheet" type="text/css" media="all" />
-
+<meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -267,20 +267,6 @@ if (isset($_POST['search'])){
 	</div>
 </div>
 
-<!-- //banner -->
-<!-- login-page -->
-<!--
-<div class="login">
-	<div class="container">
-		<div class="login-grids">
-			
-
-			<div class="clearfix"></div>
-		</div>
-	</div>
-			
-</div>
--->   
 	<div id="display">
 
 	</div>
@@ -291,11 +277,6 @@ if (isset($_POST['search'])){
 		
 	</div>
 	<textarea id="inputMessage" placeholder="Enter your message here" maxlength="140"></textarea>
-	
-	<!--
-	<button id="send">Send</button>
-	<span id="footer">&copy; 2016 Daocun Yang  <span>
--->
 	
 </div>
 

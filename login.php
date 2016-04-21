@@ -103,8 +103,7 @@ if (isset($_POST['submit'])){
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		<meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -164,15 +163,7 @@ if (isset($_POST['submit'])){
 						</script>
 				<!-- //search-scripts -->
 				<div class="header-right">
-					<!--
-						<div class="cart box_1">
-							<a href="checkout.html">
-								<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)<img src="images/bag.png" alt=""></h3>
-							</a>	
-							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
-							<div class="clearfix"> </div>
-						</div>
-					-->
+	
 				</div>
 				<div class="clearfix"></div>
 		</div>
@@ -261,35 +252,7 @@ if (isset($_POST['submit'])){
 		</div>
 	</div>
 </div>
-<!-- //login-page -->
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
-<!-- //footer-top -->
+
 <!-- footer -->
 <div class="footer">
 	<div class="container">

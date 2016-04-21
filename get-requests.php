@@ -7,14 +7,12 @@
 	$database_name="eatiteat_User";
 	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
 		if (!$connection){
-		// <script> alert('connection fail')</script>
-	    die("Database Connection Failed" . mysqli_connect_error());
+	    die("Database Connection Failed" );
 	}
 
     $select_db = mysqli_select_db($connection,$database_name);
     	if (!$select_db){
-		// <script> alert('databaseselection fail')</script>
-	    die("Database Selection Failed" . mysql_error());
+	    die("Database Selection Failed");
 	}
 
     // first display pending requests
@@ -26,15 +24,7 @@
     $output = "<h4>Pending Chat Requests: </h4>";
 
     if($get_rows != 0){
-    	/*
-    		while($row = mysqli_fetch_array($query)){
-    			echo "<b>" . $row['initiator'] . "</b>" . " wants to chat with you" . "&nbsp;&nbsp;&nbsp;&nbsp;";
-				$url = $row['url'];
-				//echo '<form method="link" action="' . $url . '">' . '<input type="submit" value="Accept"></form>';
-				echo '<button id="accept-chat" onclick="accept_chat(\'' .$url . '\')">Accept</button>';
-				echo '<br /><br />'; 
-			}
-			*/
+
 			while($row = mysqli_fetch_assoc($query)){
 				$content = "<b>" . $row['initiator'] . "</b>" . " wants to chat with you" . "&nbsp;&nbsp;&nbsp;&nbsp;";
 				$url = $row['url'];
@@ -52,7 +42,7 @@
        $queryStr2 = "SELECT initiator, responder, url FROM ChatRequests GROUP BY initiator, responder";
 	      $result = mysqli_query($connection, $queryStr2);
 	      if (!$result){
-	         echo "ERROR: " . mysqli_error($connection);
+	         echo "ERROR ";
 	      }
 	      
 	      else {

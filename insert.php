@@ -10,23 +10,18 @@
 	$connection = mysqli_connect($server_name,$user_name, $dbpassword);
 		if (!$connection){
 		// <script> alert('connection fail')</script>
-	    die("Database Connection Failed" . mysqli_connect_error());
+	    die("Database Connection Failed");
 	}
 
     $select_db = mysqli_select_db($connection,$database_name);
     	if (!$select_db){
 		// <script> alert('databaseselection fail')</script>
-	    die("Database Selection Failed" . mysql_error());
+	    die("Database Selection Failed" );
 	}
 
     $queryStr = "INSERT INTO Chatlog (sender, receiver, Log) values ('$uname', '$receiver','$msg')";
     $query = mysqli_query($connection, $queryStr);
-    /*
-    $result1 = mysqli_query($connection, "SELECT * FROM Chatlog"); // ORDER by Id DESC limit 1
-    while($extract = mysqli_fetch_array($result1)){
-    	echo $extract['Username'] . ":   " . $extract['Log'];
-    }
-    */
+
     echo $uname .  ":   " . $msg;
 
 ?>

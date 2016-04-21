@@ -61,21 +61,7 @@ require('yelp.php');
 			    $search_item['Taste']=$row['Taste'];
 			    $search_item['Nutrition']=$row['Nutrition'];
 			    $search_item['Price']=$row['Price'];
-			 //   $newItem['order-item'] = $row['item_name'];
-			 //   $newItem['order-seller'] = $row['Username'];
-			    /*
-			    $cur = array();
-			    array_push($cur, $row['item_name'], $row['Username'], $_SESSION['name']);
-			    $details = implode(",", $cur);
-			    $newItem['Order'] = '<button id="order-item" onclick="order_item(\'' . $details . '\')">ORDER</button><br />';
-			    */
-                /*
-                if(isOnline($row['Username'], $connection) == true)
-                	//$newItem['chat'] = "<button onclick=\"chat()\">Chat</button>";
-                	$newItem['chat'] = "TRUE";
-                else
-                	$newItem['chat'] = "False";
-                	*/
+
                 $user = $row['Username'];	
 
                 if ($user != $_SESSION['name']){
@@ -466,9 +452,9 @@ function display_item($iteminfo=array()){
 			<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -488,10 +474,6 @@ function display_item($iteminfo=array()){
 				});
 
                 var User = "<?php echo $_SESSION['name']; ?>";
-              /*  var login = "<?php echo $_SESSION['login']; ?>"
-                var logout = "<?php echo $_SESSION['logout']; ?>"
-                alert(login);
-                alert(logout); */
 				if (!User){
 					var content1 = "<ul><li id=\"login_link\"><a href=\"login.php\">Login</a></li>";
 					    content1 += " | ";
@@ -598,15 +580,7 @@ function display_item($iteminfo=array()){
 						</script>
 				<!-- //search-scripts -->
 				<div class="header-right">
-					<!--
-						<div class="cart box_1">
-							<a href="checkout.html">
-								<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)<img src="images/bag.png" alt=""></h3>
-							</a>	
-							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
-							<div class="clearfix"> </div>
-						</div>
-					-->
+
 				</div>
 				<div class="clearfix"></div>
 		</div>

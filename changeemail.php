@@ -88,8 +88,7 @@ if (isset($_POST['submit'])){
 	<!-- for-mobile-apps -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<meta name="keywords" content="Favorites Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
-		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		<meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 	<!-- //for-mobile-apps -->	
 	<!-- js -->
@@ -161,15 +160,7 @@ if (isset($_POST['submit'])){
 						</script>
 				<!-- //search-scripts -->
 				<div class="header-right">
-					<!--
-						<div class="cart box_1">
-							<a href="checkout.html">
-								<h3> <span class="simpleCart_total"> $0.00 </span> (<span id="simpleCart_quantity" class="simpleCart_quantity"> 0 </span> items)<img src="images/bag.png" alt=""></h3>
-							</a>	
-							<p><a href="javascript:;" class="simpleCart_empty">Empty cart</a></p>
-							<div class="clearfix"> </div>
-						</div>
-					-->
+
 				</div>
 				<div class="clearfix"></div>
 		</div>
@@ -254,81 +245,7 @@ if (isset($_POST['submit'])){
 		</div>
 	</div>
 </div>
-<!--
-<div class="registration-form">
-	<div class="container">
-      <h3>Welcome, <span id="Name"></span></h3><br /><br />
-      <div id="buttons" align="center">
-     		<a class="hvr-shutter-in-horizontal button" id="add-item-button">Add New Item</a>
-     		<a class="hvr-shutter-in-horizontal button" style="margin-left:1%">Display My Items</a>
-  		</div>
-  		<div class="registration-grids">
-  		<div id="item_form" align="center">
-     
-     						 <p>Please enter the following information for the new item you plan to sell</p>
-					 <<form action="login.php" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
 
-					 </form>
-    
-			</div>
-	</div>
-	<div class="clearfix"></div>
-	</div>
-</div>
-<div id="item_form">
-     
-     						 <p>Welcome, please log in to continue.</p>
-					 <form action="" method="post">
-						 <h5>User Name:</h5>	
-						 <input type="text" id="username" name="username" placeholder="username">
-						 <h5>Password:</h5>
-						 <input type="password" id="password" name="password" placeholder="password">					
-						 <p id="login_error">
-						 	
-						 </p>
-						 <input id="loginbutton"type="submit" name="submit" value="LOGIN">
-
-					 </form>
-    
-			
-	</div>
--->
-<!-- registration-form -->
-
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
 <!-- //footer-top -->
 <!-- footer -->
 <div class="footer">

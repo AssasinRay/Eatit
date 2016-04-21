@@ -4,6 +4,7 @@
    $seller = $_POST['Seller'];
    $notes = $_POST['Notes'];
    $status = "in progress";
+   $seen = "no";
 
    $server_name="engr-cpanel-mysql.engr.illinois.edu";
 	$user_name="eatiteat_Ray";
@@ -28,8 +29,8 @@
         $phoneNum = $row['phone_num'];
         break;
       }
-
-    $queryStr = "INSERT INTO Orders (buyer, seller, itemName, notes, buyerContact, status) values ('$buyer', '$seller', '$item', '$notes', '$phoneNum', '$status')";
+   
+    $queryStr = "INSERT INTO Orders (buyer, seller, itemName, notes, buyerContact, status, seen) values ('$buyer', '$seller', '$item', '$notes', '$phoneNum', '$status', '$seen')";
     $query = mysqli_query($connection, $queryStr);
     if (!$query)
        echo "ERROR: " . mysqli_error($connection);

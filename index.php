@@ -19,6 +19,7 @@ if (isset($_POST['search'])){
 			<link href="css/bootstrap.css" rel="stylesheet">
 			<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
 	<!-- for-mobile-apps -->
+	   <meta name="description" content="Eatit - food sharing platform for Champaign, Illinois">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
@@ -270,59 +271,6 @@ if (isset($_POST['search'])){
 	<!-- //banner-bottom -->
 </div>
 <!-- //banner -->
-<!-- welcome -->
-<!--
-<div class="welcome">
-	<div class="container">
-		<div class="wel-info" style="text-align:center">
-			<h3>WELCOME</h3>
-			<div class="strip-line"></div>
-			<h4 style="margin-top:2%">Discover and order delicious home-made food from different cultures! </h4>
-		</div>
-		<div class="welcome-grids">
-			<div class="col-md-4 welcome-grid-img">
-				<img src="images/scallion_pancake.jpg" alt=""/>
-				<div class="wel-pos">
-					<h4>Scallion Pancake</h4>
-				</div>
-			</div>
-			<div class="col-md-4 welcome-grid">
-				<div class="welcome-gd second">
-					<h4>Title</h4>
-					<p> Some words here.
-					</p>
-				</div>
-			</div>
-			<div class="col-md-4 welcome-grid-img">
-				<img src="images/pic11.jpg" alt=""/>
-				<div class="wel-pos">
-					<h4>CARROT EGG</h4>
-				</div>
-			</div>
-			<div class="col-md-4 welcome-grid">
-				<div class="welcome-gd second">
-					<h4>Scallion Pancake </h4>
-					<p> Some words
-					</p>
-			</div>
-			<div class="col-md-4 welcome-grid-img">
-				<img src="images/pic2.jpg" alt=""/>
-				<div class="wel-pos">
-					<h4>SPECIAL PRAWNS</h4>
-				</div>
-			</div>
-			<div class="col-md-4 welcome-grid">
-				<div class="welcome-gd second">
-					<h4>Title </h4>
-					<p> Some words here.
-					</p>
-				</div>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
--->
 <div class="welcome">
 	<div class="container">
 		<div class="wel-info">
@@ -402,74 +350,7 @@ if (isset($_POST['search'])){
 		</div>
 	</div>
 </div>
-<!-- //good -->
-<!-- delicious -->
-<!--
-<div class="delicious">
-	<div class="container">
-		<div class="delicious-info">
-			<h3>DELICIOUS FOOD FOR ALL TASTES</h3>
-			<div class="strip-line"></div>
-		</div>
-		<div class="delicious-grids">
-			<div class="col-md-3 delicious-grid">
-				<h3>PASTA SPECIAL</h3>
-				<img src="images/g3.jpg" alt=""/>
-				<p>Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers lectus consectetur pellentesque blandit nec orci</p>
-				<a href="#">MORE</a>
-			</div>
-			<div class="col-md-3 delicious-grid">
-				<h3>FRIED CHICKEN</h3>
-				<img src="images/g6.jpg" alt=""/>
-				<p>Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers lectus consectetur pellentesque blandit nec orci</p>
-				<a href="#">MORE</a>
-			</div>
-			<div class="col-md-3 delicious-grid">
-				<h3>SAUSAGES</h3>
-				<img src="images/g5.jpg" alt=""/>
-				<p>Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers lectus consectetur pellentesque blandit nec orci</p>
-				<a href="#">MORE</a>
-			</div>
-			<div class="col-md-3 delicious-grid">
-				<h3>BREAD SLICE</h3>
-				<img src="images/g1.jpg" alt=""/>
-				<p>Pellentesque ut urna eu mauris scele risque auctor volutpat et massa pers lectus consectetur pellentesque blandit nec orci</p>
-				<a href="#">MORE</a>
-			</div>
-			<div class="clearfix"></div>
-		</div>
-	</div>
-</div>
--->
-<!-- //delicious -->
-<!-- footer-top -->
-<!--
-<div class="footer-top">
-	<div class="container">
-		<div class="col-md-3 footer-grid">
-			<h3><a href="#">FAVORITES</a></h3>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>BUFFET</h4>
-			<p>MONDAY - THURSDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ORDERS</h4>
-			<p>MONDAY - SUNDAY<span>7 : 00 - 21 : 00</span></p>
-		</div>
-		<div class="col-md-3 footer-grid">
-			<h4>ADDRESS</h4>
-			<ul>
-				<li class="list-one">Lorem ipsy street, Newyork</li>
-				<li class="list-two"><a href="mailto:info@example.com">favorites@example.com</a></li>
-				<li class="list-three">+8 800 555 555 55</li>
-			</ul>
-		</div>
-		<div class="clearfix"></div>
-	</div>
-</div>
--->
-<!-- //footer-top -->
+
 <!-- footer -->
 <div class="footer">
 	<div class="container">
@@ -479,14 +360,6 @@ if (isset($_POST['search'])){
 		
 		<div class="footer-right">
 			<ul>
-				<!--
-				<li><a href="#" class="twitter"> </a></li>
-				<li><a href="#" class="facebook"> </a></li>
-				<li><a href="#" class="chrome"> </a></li>
-				<li><a href="#" class="pinterest"> </a></li>
-				<li><a href="#" class="linkedin"> </a></li>
-				<li><a href="#" class="dribbble"> </a></li>
-			-->
 			   <li>Yiwei Zhuang<li>
 			   <li>Daocun Yang<li>
 			   	<li>Yang Yao<li>

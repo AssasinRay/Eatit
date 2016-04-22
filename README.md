@@ -1,10 +1,15 @@
 # Eatit
 
-Task 1 - Completed: 
-user registration/sign in/log out
+<h6>Final project of CS 411 - Database Systems at the University of Illinois at Urbana-Champaign (UIUC).</h6>
+For a detailed description, please click <a href="https://wiki.cites.illinois.edu/wiki/display/cs411sp16/Final+Report+---+Eatit">here</a>.
 
-Task 2 - Completed:
-allow user to update his profile info, and delete account
+<h3>Project URL:</h3>
 
-Task 3 - TODO:
-enable user to add new food item
+http://eatiteatit.web.engr.illinois.edu/
+
+<h3>Video Demo: </h3>
+https://youtu.be/VP6CJtjvsFo
+
+
+
+

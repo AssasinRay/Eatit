@@ -194,7 +194,7 @@ if (isset($_POST['submit'])){
                     add_form.hide();
                     display_order.hide();
                     display_chat.hide();
-                    $.post('getitems.php', {name: user}, function(data){
+                    $.post('php-scripts/getitems.php', {name: user}, function(data){
                         items.html(data);
                         display_form.fadeIn(100);
                     });
@@ -205,7 +205,7 @@ if (isset($_POST['submit'])){
 					display_form.hide();
 					display_chat.hide();
 					$.ajax({
-						url: "get-orders.php",
+						url: "php-scripts/get-orders.php",
 						type: "GET",
 						data:{User: user},
 						  success: function(response) {
@@ -223,7 +223,7 @@ if (isset($_POST['submit'])){
 					display_form.hide();
 					display_order.hide();
 					$.ajax({
-						url: "get-requests.php",
+						url: "php-scripts/get-requests.php",
 						type: "get", 
 						data:{User: user},
 						  success: function(response) {
@@ -242,7 +242,7 @@ if (isset($_POST['submit'])){
 
 			 function poll_chat(user){
  		   	   		$.ajax({
-						url: "poll-chat.php",
+						url: "php-scripts/poll-chat.php",
 						type: "get", 
 						data:{User: user}, //, Count, chatCount},
 						  success: function(response) {
@@ -257,7 +257,7 @@ if (isset($_POST['submit'])){
 
  		   function poll_order(user){
  		   	   		$.ajax({
-						url: "poll-orders.php",
+						url: "php-scripts/poll-orders.php",
 						type: "get", 
 						data:{User: user}, //, Count, chatCount},
 						  success: function(response) {
@@ -275,7 +275,7 @@ if (isset($_POST['submit'])){
            	   var ans = confirm("Are you sure you want to delete this item?");
            	   if (!ans) return;
                $.ajax({
-                   url: 'delete-item.php',
+                   url: 'php-scripts/delete-item.php',
                    data: {item_name: target},
                    type: 'POST',
                    success: function(){
@@ -288,7 +288,7 @@ if (isset($_POST['submit'])){
            function transaction_complete(orderID){
            	 //var res = confirm("");
            	 $.ajax({
-                   url: 'delete-order.php',
+                   url: 'php-scripts/delete-order.php',
                    data: {ID: orderID, Status: "complete"},
                    type: 'GET',
                    success: function(){
@@ -316,7 +316,7 @@ if (isset($_POST['submit'])){
            	    // first delete the request (mark the request as accepted)
            	    var user = "<?php echo $_SESSION['name']; ?>";
             	$.ajax({
-                   url: 'delete-chat.php',
+                   url: 'php-scripts/delete-chat.php',
                    data: {User: user},
                    type: 'GET',
                    success: function(){

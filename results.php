@@ -1,5 +1,5 @@
 <?php 
-require('yelp.php');
+require('php-scripts/yelp.php');
    session_start();
 /*
    	if (!$_SESSION['queryString'])
@@ -502,7 +502,7 @@ function display_item($iteminfo=array()){
 
 	         	if (seller && curUser){
 	         		$.ajax({
-						url: "chat-requests.php",
+						url: "php-scripts/chat-requests.php",
 						type: "get", 
 						data:{initiator: curUser, responder: seller, URL: url},
 						  success: function(response) {
@@ -533,7 +533,7 @@ function display_item($iteminfo=array()){
            	   */
            	   var target = item;
                $.ajax({
-                   url: 'place-order.php',
+                   url: 'php-scripts/place-order.php',
                    data: {Item: item, Seller: seller, Buyer: buyer, Notes: message},
                    type: 'POST',
                    success: function(response){

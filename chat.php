@@ -125,7 +125,7 @@ if (isset($_POST['search'])){
 				       }
 						*/
 						$.ajax({
-							  url: "insert.php",
+							  url: "php-scripts/insert.php",
 							  type: "get", 
 							  data:{uname:User, receiver: other, msg: msg},
 							  success: function(response) {
@@ -153,7 +153,7 @@ if (isset($_POST['search'])){
             function getMessages(self,other){
 
 				$.ajax({
-					  url: "logs.php",
+					  url: "php-scripts/logs.php",
 					  type: "get", 
 					  data:{participant1: self, participant2: other},
 					  success: function(response) {

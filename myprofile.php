@@ -226,7 +226,7 @@ if (isset($_POST['search'])){
 							   	  return false;
 							   }
 							   else {
-							   	window.location = "delete_account.php";
+							   	window.location = "php-scripts/delete_account.php";
 							   	return true;
 							   }
 							   	  

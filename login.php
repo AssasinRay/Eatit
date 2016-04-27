@@ -7,7 +7,7 @@ if (isset($_POST['search'])){
      header('Location: results.php');
 }
 
-require "password.php";
+require "lib/password.php";
 
 if (isset($_POST['submit'])){
 	$server_name="engr-cpanel-mysql.engr.illinois.edu";

@@ -2,7 +2,7 @@
 	// require('dbconnect.php');
 session_start();
 
-require "password.php";
+require "lib/password.php";
 
 if (isset($_POST['search'])){
      $_SESSION['queryString'] = $_POST['search'];

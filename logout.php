@@ -15,6 +15,7 @@ session_start();
 	$res = mysqli_query($connection,$updateT);
 
 session_unset();
+session_destroy();
 header('Location: index.php');
 
 

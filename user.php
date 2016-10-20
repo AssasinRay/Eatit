@@ -3,6 +3,8 @@
    if (!$_SESSION['name'])
    		header('Location: index.php');
 
+require_once("./settings.php");
+
 if (isset($_POST['search'])){
      $_SESSION['queryString'] = $_POST['search'];
      //echo $_SESSION['queryString'];

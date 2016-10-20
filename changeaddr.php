@@ -1,6 +1,7 @@
 <?php
 	// require('dbconnect.php');
     session_start();
+    require_once("./settings.php");
 
        if (!$_SESSION['name'])
    		header('Location: index.php');

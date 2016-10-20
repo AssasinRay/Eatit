@@ -1,6 +1,7 @@
 <?php 
-require('php-scripts/yelp.php');
+   require('php-scripts/yelp.php');
    session_start();
+   require_once("./settings.php");
 /*
    	if (!$_SESSION['queryString'])
    		header('Location: user.php');

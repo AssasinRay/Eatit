@@ -1,6 +1,8 @@
 <?php 
   
     session_start();
+    require_once("./settings.php");
+    
 if (isset($_POST['search'])){
      $_SESSION['queryString'] = $_POST['search'];
      //echo $_SESSION['queryString'];

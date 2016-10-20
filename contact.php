@@ -1,7 +1,7 @@
 <?php
 	// require('dbconnect.php');
     session_start();
-
+    require_once("./settings.php");
 
 ?>
 
